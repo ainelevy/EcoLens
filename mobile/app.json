@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "EcoLens",
+    "slug": "ecolens",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#F0FFF0"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.ecolens.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F0FFF0"
+      },
+      "package": "com.ecolens.app"
+    },
+    "plugins": [
+      "expo-secure-store",
+      "expo-font"
+    ]
+  }
+}
