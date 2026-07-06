@@ -159,6 +159,7 @@ tbody tr:hover td{background:#f8fdf8}
 .kiosk-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
 .kc-top-stripe{height:4px}
 .kc-top-stripe.online{background:var(--leaf-bright)}
+.kc-top-stripe.warn{background:var(--amber)}
 .kc-top-stripe.full{background:var(--red)}
 .kc-top-stripe.offline{background:var(--muted)}
 .kc-head{padding:16px 16px 12px;display:flex;justify-content:space-between;align-items:flex-start}
@@ -574,14 +575,16 @@ function renderKiosks(el, kiosks){
   }
   var now = Date.now();
   var cards = kiosks.map(function(k){
-    var bottles = k.currentBottleCount || 0, capacity = k.capacity || 10;
+    var bottles = k.currentBottleCount || 0, capacity = k.capacity || 300;
     var pct = Math.min((bottles / capacity) * 100, 100);
     var barCls = pct < 70 ? 'cap-green' : pct < 90 ? 'cap-amber' : 'cap-red';
     var online = k.lastSeenAt && (now - new Date(k.lastSeenAt)) < 5 * 60 * 1000;
+    var nearFull = !k.isFull && pct >= 80;
     var seen = timeAgo(k.lastSeenAt);
-    var stripCls = k.isFull ? 'full' : online ? 'online' : 'offline';
+    var stripCls = k.isFull ? 'full' : nearFull ? 'warn' : online ? 'online' : 'offline';
     var statusBadge = k.isFull
       ? '<span class="badge badge-red">🔴 Full</span>'
+      : nearFull ? '<span class="badge badge-amber">🟠 Nearly full</span>'
       : online ? '<span class="badge badge-green">🟢 Online</span>'
       : '<span class="badge badge-gray">⚫ Offline</span>';
     var resetBtn = bottles > 0
@@ -598,7 +601,7 @@ function renderKiosks(el, kiosks){
       '</div>' +
       '<div class="kc-uuid">' + esc(k.id) + ' <button class="copy-btn" onclick="copyText(\'' + esc(k.id) + '\',this)">Copy ID</button></div>' +
       '<div class="kc-body">' +
-      '<div class="cap-label"><span>Bin: ' + bottles + ' / ' + capacity + '</span><span>' + pct.toFixed(0) + '% full</span></div>' +
+      '<div class="cap-label"><span>Bin: ' + bottles + ' / ' + capacity + '</span><span>' + pct.toFixed(0) + '% full · ' + (capacity - bottles) + ' left</span></div>' +
       '<div class="cap-wrap"><div class="cap-bar ' + barCls + '" style="width:' + pct + '%"></div></div>' +
       '<div class="kc-stat-row">' +
       '<div class="kc-mini-stat"><div class="kc-mini-num">' + (k.stats ? k.stats.totalSessions : 0) + '</div><div class="kc-mini-lbl">Sessions</div></div>' +
@@ -625,7 +628,7 @@ async function viewKiosk(id){
   el.innerHTML = '<div class="card"><div class="card-body"><div class="empty"><div class="empty-ico">⏳</div><p>Loading kiosk details…</p></div></div></div>';
   try{
     var k = await apiFetch('/api/admin/kiosks/' + id);
-    var bottles = k.currentBottleCount || 0, capacity = k.capacity || 10;
+    var bottles = k.currentBottleCount || 0, capacity = k.capacity || 300;
     var pct = Math.min((bottles / capacity) * 100, 100);
     var barCls = pct < 70 ? 'cap-green' : pct < 90 ? 'cap-amber' : 'cap-red';
     var seen = timeAgo(k.lastSeenAt);

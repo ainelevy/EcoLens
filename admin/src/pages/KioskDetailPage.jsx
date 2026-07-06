@@ -84,7 +84,7 @@ export default function KioskDetailPage({ token, kioskId, navigate }) {
   if (!kiosk)  return null
 
   const bottles  = kiosk.currentBottleCount || 0
-  const capacity = kiosk.capacity || 10
+  const capacity = kiosk.capacity || 300
   const pct      = Math.min((bottles / capacity) * 100, 100)
   const barCls   = pct < 70 ? 'prog-green' : pct < 90 ? 'prog-amber' : 'prog-red'
 

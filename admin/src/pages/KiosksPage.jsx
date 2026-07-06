@@ -17,13 +17,15 @@ function StatusBadge({ status }) {
 }
 
 function CapBar({ current, max }) {
-  const pct = Math.min(((current || 0) / (max || 10)) * 100, 100)
+  const cap = max || 300
+  const pct = Math.min(((current || 0) / cap) * 100, 100)
   const cls = pct < 70 ? 'prog-green' : pct < 90 ? 'prog-amber' : 'prog-red'
   return (
     <div style={{ minWidth: 110 }}>
       <div className="flex justify-between fs-11 c-gray mb-4">
-        <span>{current || 0}/{max || 10}</span>
-        {pct >= 100 && <span className="c-red fw-600">FULL</span>}
+        <span>{current || 0}/{cap}</span>
+        {pct >= 100 ? <span className="c-red fw-600">FULL</span>
+          : pct >= 80 && <span className="c-amber fw-600">NEARLY FULL</span>}
       </div>
       <div className="prog-wrap" style={{ height: 7 }}>
         <div className={`prog-bar ${cls}`} style={{ width: `${pct}%` }} />
