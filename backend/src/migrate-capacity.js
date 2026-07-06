@@ -11,8 +11,11 @@ const NEW_CAPACITY = 300;
 
 const run = async () => {
   try {
+    // Keep output to just the summary — silence Sequelize's per-query logging, which
+    // is otherwise on when NODE_ENV=development (as it was for the local run).
+    sequelize.options.logging = false;
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true }); // ensure currentBottleCount/capacity columns exist
+    await sequelize.sync({ alter: true, logging: false }); // ensure columns exist, quietly
 
     const before = await SmartUnit.findAll();
     console.log(`Found ${before.length} kiosk(s).`);
