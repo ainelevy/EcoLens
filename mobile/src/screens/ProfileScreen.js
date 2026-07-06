@@ -145,7 +145,7 @@ export default function ProfileScreen() {
         <Text style={styles.logoutText}>Log Out</Text>
       </TouchableOpacity>
 
-      <Text style={styles.version}>EcoLens v1.0.0 | BSE4203 Group 6</Text>
+      <Text style={styles.version}>EcoLens v1.1.0 | BSE4203 Group 6</Text>
       <View style={{ height: 40 }} />
     </ScrollView>
   );

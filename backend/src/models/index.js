@@ -91,7 +91,7 @@ const SmartUnit = sequelize.define('SmartUnit', {
   status: { type: DataTypes.ENUM('active', 'offline', 'maintenance'), defaultValue: 'active' },
   lastSeenAt: { type: DataTypes.DATE },
   currentBottleCount: { type: DataTypes.INTEGER, defaultValue: 0 },
-  capacity: { type: DataTypes.INTEGER, defaultValue: 10 },
+  capacity: { type: DataTypes.INTEGER, defaultValue: 300 },
 }, { tableName: 'smart_units' });
 
 SmartUnit.beforeCreate((unit) => {

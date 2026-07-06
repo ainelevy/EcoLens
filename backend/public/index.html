@@ -4,253 +4,353 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>EcoLens Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"/>
 <style>
 :root{
-  --ink:#1a2414;--paper:#f7f3ec;--card:#ffffff;--leaf:#2d6a4f;--leaf-bright:#40916c;
-  --leaf-pale:#d8f3dc;--clay:#b7410e;--amber:#e9a31a;--amber-pale:#fdf3ce;
-  --muted:#6b7c61;--border:#dde6d5;--red:#c0392b;--red-pale:#fde8e6;
-  --blue:#1a6fa8;--radius:10px;--shadow:0 2px 12px rgba(0,0,0,.08);
+  --sidebar-w:230px;
+  --sidebar-bg:#0f1f0f;
+  --sidebar-text:rgba(255,255,255,.7);
+  --sidebar-active:#fff;
+  --sidebar-accent:#22c55e;
+  --bg:#f0f4f0;
+  --card:#fff;
+  --ink:#0f172a;
+  --muted:#64748b;
+  --border:#e2e8f0;
+  --leaf:#166534;
+  --leaf-bright:#16a34a;
+  --leaf-pale:#dcfce7;
+  --red:#dc2626;
+  --red-pale:#fee2e2;
+  --amber:#d97706;
+  --amber-pale:#fef3c7;
+  --blue:#2563eb;
+  --blue-pale:#dbeafe;
+  --radius:12px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
+  --shadow-md:0 4px 12px rgba(0,0,0,.12),0 8px 32px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--paper);color:var(--ink);font-size:14px;line-height:1.5}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;min-height:100vh}
 
-/* ── Layout ── */
-#login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a2414 0%,#2d6a4f 100%)}
-#app-view{display:none;flex-direction:column;min-height:100vh}
-#topbar{background:var(--leaf);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-#topbar .brand{font-weight:700;font-size:17px;letter-spacing:.4px}
-#topbar .brand span{color:#a7f3d0;font-size:13px;margin-left:6px;font-weight:400}
-#topbar .right{display:flex;align-items:center;gap:12px}
-#topbar .admin-label{font-size:12px;opacity:.8}
-.tabs{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0}
-.tab-btn{padding:14px 20px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s}
-.tab-btn:hover{color:var(--leaf)}
-.tab-btn.active{color:var(--leaf);border-bottom-color:var(--leaf);font-weight:600}
-#main{flex:1;padding:24px;max-width:1200px;width:100%;margin:0 auto}
+/* ── Login ── */
+#login-view{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0f1f0f 0%,#166534 60%,#16a34a 100%)}
+.login-card{background:#fff;border-radius:20px;padding:44px 40px;width:400px;box-shadow:0 24px 64px rgba(0,0,0,.3)}
+.login-brand{text-align:center;margin-bottom:32px}
+.login-icon{width:56px;height:56px;background:var(--leaf-pale);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px}
+.login-brand h1{font-size:24px;font-weight:800;color:var(--ink)}<br>.login-brand h1 span{color:var(--leaf-bright)}
+.login-brand p{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:.5px;text-transform:uppercase}
+.login-card h2{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:20px}
+
+/* ── App shell ── */
+#app-view{display:none;min-height:100vh}
+#sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--sidebar-bg);display:flex;flex-direction:column;z-index:100;overflow-y:auto}
+.sb-brand{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,.08)}
+.sb-brand .logo{display:flex;align-items:center;gap:10px}
+.sb-brand .logo-icon{width:36px;height:36px;background:var(--sidebar-accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-brand .logo-text{font-size:16px;font-weight:700;color:#fff}
+.sb-brand .logo-text span{color:var(--sidebar-accent)}
+.sb-brand .logo-sub{font-size:10px;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-top:1px}
+.sb-nav{flex:1;padding:16px 12px}
+.sb-section-label{font-size:10px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,.3);padding:8px 8px 4px;margin-top:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:8px;cursor:pointer;color:var(--sidebar-text);font-size:13px;font-weight:500;border:none;background:none;width:100%;text-align:left;transition:all .15s;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav-item.active{background:rgba(34,197,94,.15);color:var(--sidebar-accent);font-weight:600}
+.nav-item .nav-icon{width:20px;text-align:center;font-size:15px;flex-shrink:0}
+.nav-item .nav-badge{margin-left:auto;background:var(--sidebar-accent);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:99px}
+.sb-footer{padding:16px 12px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-admin{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;margin-bottom:8px}
+.sb-admin-avatar{width:32px;height:32px;border-radius:50%;background:rgba(34,197,94,.2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--sidebar-accent);flex-shrink:0}
+.sb-admin-name{font-size:12px;font-weight:600;color:#fff;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-admin-role{font-size:10px;color:rgba(255,255,255,.4)}
+.btn-signout{width:100%;display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:none;color:rgba(255,255,255,.6);font-size:12px;font-weight:500;cursor:pointer;transition:all .15s}
+.btn-signout:hover{background:rgba(220,38,38,.15);border-color:rgba(220,38,38,.4);color:#fca5a5}
+
+/* ── Main ── */
+#main-area{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+#topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;gap:16px}
+.topbar-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:320px}
+.topbar-search input{border:none;background:none;font-size:13px;color:var(--ink);width:100%;outline:none}
+.topbar-search input::placeholder{color:var(--muted)}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.refresh-indicator{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.refresh-dot{width:6px;height:6px;border-radius:50%;background:var(--leaf-bright);animation:pulse-dot 2s infinite}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.7)}}
+#content{flex:1;padding:28px;max-width:1300px;width:100%}
 .section{display:none}.section.active{display:block}
 
-/* ── Login card ── */
-.login-card{background:#fff;border-radius:16px;padding:44px 40px;width:380px;box-shadow:0 8px 40px rgba(0,0,0,.25)}
-.login-logo{text-align:center;margin-bottom:28px}
-.login-logo .eco{font-size:36px;font-weight:800;color:var(--leaf)}
-.login-logo .lens{font-size:36px;font-weight:800;color:var(--amber)}
-.login-logo .sub{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
-.login-card h2{font-size:18px;margin-bottom:20px;color:var(--ink)}
-
-/* ── Form elements ── */
-.form-group{margin-bottom:16px}
-.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
-.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:14px;color:var(--ink);background:#fff;transition:border-color .15s}
-.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--leaf-bright)}
+/* ── Forms ── */
+.form-group{margin-bottom:18px}
+.form-group label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group select{width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;color:var(--ink);background:#fff;transition:border-color .15s;font-family:inherit}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--leaf-bright);box-shadow:0 0 0 3px rgba(22,163,74,.1)}
 .hint{font-size:11px;color:var(--muted);margin-top:4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 
 /* ── Buttons ── */
-.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:7px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:8px;border:none;cursor:pointer;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap;font-family:inherit}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-.btn-primary{background:var(--leaf);color:#fff}.btn-primary:hover:not(:disabled){background:var(--leaf-bright)}
-.btn-danger{background:var(--red);color:#fff}.btn-danger:hover:not(:disabled){background:#a93226}
-.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover:not(:disabled){background:#d4921a}
-.btn-ghost{background:transparent;color:var(--leaf);border:1.5px solid var(--border)}.btn-ghost:hover:not(:disabled){background:var(--leaf-pale)}
+.btn-primary{background:var(--leaf-bright);color:#fff}.btn-primary:hover:not(:disabled){background:var(--leaf)}
+.btn-danger{background:var(--red);color:#fff}.btn-danger:hover:not(:disabled){background:#b91c1c}
+.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover:not(:disabled){background:#b45309}
+.btn-ghost{background:transparent;color:var(--muted);border:1.5px solid var(--border);font-size:12px}.btn-ghost:hover:not(:disabled){background:var(--bg);color:var(--ink)}
 .btn-sm{padding:6px 12px;font-size:12px}
+.btn-xs{padding:4px 10px;font-size:11px}
 .btn-full{width:100%;justify-content:center;padding:12px}
-.btn-deactivate{background:var(--red-pale);color:var(--red);border:1px solid #f5c6c2}.btn-deactivate:hover:not(:disabled){background:var(--red);color:#fff}
-.btn-activate{background:var(--leaf-pale);color:var(--leaf);border:1px solid #b7d9c4}.btn-activate:hover:not(:disabled){background:var(--leaf);color:#fff}
+.btn-deactivate{background:var(--red-pale);color:var(--red);border:1.5px solid #fecaca}.btn-deactivate:hover:not(:disabled){background:var(--red);color:#fff}
+.btn-activate{background:var(--leaf-pale);color:var(--leaf);border:1.5px solid #bbf7d0}.btn-activate:hover:not(:disabled){background:var(--leaf-bright);color:#fff}
 
-/* ── Stats strip ── */
-.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:24px}
-.stat-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;border-left:4px solid var(--leaf);box-shadow:var(--shadow)}
-.stat-num{font-size:28px;font-weight:700;color:var(--ink);line-height:1}
-.stat-lbl{font-size:12px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.4px}
+/* ── Page header ── */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.page-header-left .page-title{font-size:22px;font-weight:700;color:var(--ink)}
+.page-header-left .page-sub{font-size:13px;color:var(--muted);margin-top:2px}
+.page-header-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+/* ── Stat cards ── */
+.stats-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px;margin-bottom:24px}
+.stat-card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.stat-card.green::before{background:var(--leaf-bright)}
+.stat-card.blue::before{background:var(--blue)}
+.stat-card.amber::before{background:var(--amber)}
+.stat-card.red::before{background:var(--red)}
+.stat-card.teal::before{background:#0891b2}
+.stat-icon{font-size:22px;margin-bottom:4px}
+.stat-num{font-size:28px;font-weight:800;color:var(--ink);line-height:1.1}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.4px}
+.stat-trend{font-size:11px;color:var(--leaf-bright);font-weight:600;margin-top:2px}
 
 /* ── Cards ── */
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px;overflow:hidden}
 .card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
-.card-title{font-weight:700;font-size:15px;color:var(--ink)}
+.card-title{font-weight:700;font-size:15px;color:var(--ink);display:flex;align-items:center;gap:8px}
 .card-body{padding:20px}
+.card-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
-/* ── Kiosk cards ── */
-.kiosk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
-.kiosk-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;border-top:4px solid var(--leaf)}
-.kiosk-card.full{border-top-color:var(--red)}
-.kiosk-card.offline{border-top-color:var(--muted)}
-.kc-head{padding:16px}
-.kc-name{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:2px}
-.kc-loc{font-size:12px;color:var(--muted)}
-.kc-code{font-size:11px;font-family:monospace;color:var(--leaf-bright);margin-top:4px;font-weight:600}
-.kc-uuid{font-size:10px;font-family:monospace;color:var(--muted);margin-top:2px;word-break:break-all}
-.kc-body{padding:0 16px 12px}
-.kc-row{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
-.kc-row strong{color:var(--ink)}
-.kc-foot{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
-
-/* capacity bar */
-.cap-wrap{background:#eee;border-radius:99px;height:8px;margin:8px 0 4px;overflow:hidden}
-.cap-bar{height:100%;border-radius:99px;transition:width .4s}
-.cap-green{background:var(--leaf-bright)}
-.cap-amber{background:var(--amber)}
-.cap-red{background:var(--red)}
-.cap-lbl{font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+/* ── Search in table ── */
+.table-toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
+.table-search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:7px 12px;flex:1;max-width:280px}
+.table-search input{border:none;background:none;font-size:13px;color:var(--ink);width:100%;outline:none;font-family:inherit}
 
 /* ── Table ── */
 .table-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:13px}
-thead{background:#f4f7f2}
-th{padding:10px 14px;text-align:left;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1.5px solid var(--border)}
-td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+thead{background:#f8fafc}
+th{padding:11px 16px;text-align:left;font-weight:600;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;border-bottom:1.5px solid var(--border)}
+td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#fbfdf9}
-.mono{font-family:monospace;font-size:12px}
-.muted{color:var(--muted)}
+tbody tr{transition:background .1s}
+tbody tr:hover td{background:#f8fdf8}
+.mono{font-family:'Courier New',monospace;font-size:12px}
+.text-muted{color:var(--muted)}
 
 /* ── Badges ── */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600}
-.badge-green{background:#d1fae5;color:#065f46}
-.badge-red{background:var(--red-pale);color:var(--red)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600}
+.badge-green{background:var(--leaf-pale);color:#166534}
+.badge-red{background:var(--red-pale);color:#991b1b}
 .badge-amber{background:var(--amber-pale);color:#92400e}
-.badge-gray{background:#f0f0f0;color:#555}
+.badge-gray{background:#f1f5f9;color:#475569}
+.badge-blue{background:var(--blue-pale);color:#1e40af}
+
+/* ── Kiosk cards ── */
+.kiosk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px}
+.kiosk-card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:box-shadow .2s,transform .2s}
+.kiosk-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.kc-top-stripe{height:4px}
+.kc-top-stripe.online{background:var(--leaf-bright)}
+.kc-top-stripe.full{background:var(--red)}
+.kc-top-stripe.offline{background:var(--muted)}
+.kc-head{padding:16px 16px 12px;display:flex;justify-content:space-between;align-items:flex-start}
+.kc-name{font-size:15px;font-weight:700;color:var(--ink)}
+.kc-loc{font-size:12px;color:var(--muted);margin-top:2px}
+.kc-code{font-size:11px;font-family:monospace;color:var(--leaf-bright);margin-top:4px;font-weight:700;letter-spacing:.5px}
+.kc-uuid{font-size:10px;font-family:monospace;color:var(--muted);padding:0 16px 12px;word-break:break-all;display:flex;align-items:center;gap:6px}
+.kc-body{padding:0 16px 12px}
+.kc-stat-row{display:flex;gap:8px;margin-bottom:10px}
+.kc-mini-stat{flex:1;background:var(--bg);border-radius:8px;padding:10px;text-align:center}
+.kc-mini-num{font-size:16px;font-weight:700;color:var(--ink)}
+.kc-mini-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+.cap-wrap{background:#e2e8f0;border-radius:99px;height:6px;margin:6px 0 4px;overflow:hidden}
+.cap-bar{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.cap-green{background:var(--leaf-bright)}.cap-amber{background:var(--amber)}.cap-red{background:var(--red)}
+.cap-label{font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.kc-foot{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.kc-lastseen{font-size:11px;color:var(--muted);padding:0 16px 10px;display:flex;align-items:center;gap:4px}
+
+/* ── User avatar ── */
+.user-avatar{width:36px;height:36px;border-radius:50%;background:var(--leaf-pale);color:var(--leaf);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
 
 /* ── Modal ── */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center}
-.modal-bg.open{display:flex}
-.modal{background:#fff;border-radius:14px;width:460px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
-.modal-head{padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.modal-head h3{font-size:17px;font-weight:700}
-.modal-close{background:none;border:none;cursor:pointer;font-size:22px;color:var(--muted);line-height:1;padding:0 4px}
-.modal-body{padding:20px 24px}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.modal-bg.open{display:flex;animation:fadeInBg .2s ease}
+@keyframes fadeInBg{from{opacity:0}to{opacity:1}}
+.modal{background:#fff;border-radius:16px;width:480px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.2);animation:slideUp .25s cubic-bezier(.4,0,.2,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal-head{padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-head h3{font-size:17px;font-weight:700;color:var(--ink)}
+.modal-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--muted);line-height:1;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .15s}
+.modal-close:hover{background:var(--bg)}
+.modal-body{padding:22px 24px}
 .modal-foot{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end}
 
 /* ── Toast ── */
-#toast{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px}
-.toast-item{padding:12px 18px;border-radius:8px;color:#fff;font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:fadeIn .2s ease}
-.toast-ok{background:var(--leaf)}
-.toast-err{background:var(--red)}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;pointer-events:none}
+.toast-item{padding:12px 18px;border-radius:10px;color:#fff;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.2);animation:toastIn .25s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:8px;pointer-events:all}
+.toast-ok{background:#166534}.toast-err{background:#991b1b}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
 
 /* ── Misc ── */
-.page-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px}
-.page-title{font-size:20px;font-weight:700;color:var(--ink)}
-.page-sub{font-size:13px;color:var(--muted)}
-.empty{padding:40px;text-align:center;color:var(--muted)}
-.empty-ico{font-size:36px;margin-bottom:8px}
-.err-box{padding:14px;background:var(--red-pale);color:var(--red);border-radius:8px;margin-bottom:14px;font-size:13px}
-.alert-ok{padding:12px 16px;background:#d1fae5;color:#065f46;border-radius:8px;font-size:13px;margin-bottom:12px}
-.loading{padding:40px;text-align:center;color:var(--muted);font-size:15px}
-.flex{display:flex}.gap-8{gap:8px}.gap-12{gap:12px}.items-center{align-items:center}
-.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:10px}
-.user-initial{width:34px;height:34px;border-radius:50%;background:var(--leaf-pale);color:var(--leaf);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
-.copy-btn{background:none;border:none;cursor:pointer;color:var(--leaf-bright);font-size:12px;padding:2px 6px;border-radius:4px;font-weight:600}
-.copy-btn:hover{background:var(--leaf-pale)}
-.seen-online{color:#065f46;font-weight:600}
-.seen-recent{color:#92400e}
-.seen-old{color:var(--muted)}
+.empty{padding:60px 40px;text-align:center;color:var(--muted)}
+.empty-ico{font-size:48px;margin-bottom:12px;opacity:.6}
+.empty h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.empty p{font-size:13px;line-height:1.6;margin-bottom:16px}
+.err-box{padding:12px 16px;background:var(--red-pale);color:#991b1b;border-radius:8px;margin-bottom:14px;font-size:13px;border:1px solid #fecaca}
+.alert-ok{padding:14px 16px;background:var(--leaf-pale);color:#166534;border-radius:8px;font-size:13px;margin-bottom:12px;border:1px solid #bbf7d0;line-height:1.8}
+.skeleton{background:linear-gradient(90deg,#f0f4f0 25%,#e8f0e8 50%,#f0f4f0 75%);background-size:400% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
+@keyframes shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
+.copy-btn{background:none;border:1px solid var(--border);cursor:pointer;color:var(--leaf-bright);font-size:11px;padding:3px 8px;border-radius:5px;font-weight:600;transition:all .15s;font-family:inherit}
+.copy-btn:hover{background:var(--leaf-pale);border-color:var(--leaf-bright)}
+.seen-online{color:#166534;font-weight:600}.seen-recent{color:#92400e}.seen-old{color:var(--muted)}
+
+/* ── Mini chart bars ── */
+.mini-bar-chart{display:flex;align-items:flex-end;gap:4px;height:48px;margin:8px 0}
+.mini-bar{flex:1;background:var(--leaf-pale);border-radius:3px 3px 0 0;transition:background .2s;cursor:default;min-width:12px;position:relative}
+.mini-bar:hover{background:var(--leaf-bright)}
+.mini-bar .bar-tip{position:absolute;bottom:calc(100%+4px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none}
+.mini-bar:hover .bar-tip{opacity:1}
+
+/* ── Activity feed ── */
+.activity-feed{display:flex;flex-direction:column;gap:0}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.activity-dot.green{background:var(--leaf-bright)}.activity-dot.red{background:var(--red)}.activity-dot.amber{background:var(--amber)}
+.activity-text{font-size:13px;color:var(--ink);line-height:1.4}
+.activity-time{font-size:11px;color:var(--muted);margin-top:2px}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════ LOGIN ═══════════════════ -->
+<!-- LOGIN -->
 <div id="login-view">
   <div class="login-card">
-    <div class="login-logo">
-      <div><span class="eco">Eco</span><span class="lens">Lens</span></div>
-      <div class="sub">Admin Console</div>
+    <div class="login-brand">
+      <div class="login-icon">🌿</div>
+      <h1>Eco<span>Lens</span></h1>
+      <p>Admin Console</p>
     </div>
     <div id="login-err" class="err-box" style="display:none"></div>
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" id="l-email" placeholder="admin@ecolens.app" autocomplete="username"/>
-    </div>
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"/>
-    </div>
-    <button class="btn btn-primary btn-full" id="l-btn" onclick="doLogin()">Sign In</button>
+    <div class="form-group"><label>Email Address</label><input type="email" id="l-email" placeholder="admin@ecolens.app" autocomplete="username"/></div>
+    <div class="form-group"><label>Password</label><input type="password" id="l-pass" placeholder="••••••••" autocomplete="current-password"/></div>
+    <button class="btn btn-primary btn-full" id="l-btn" onclick="doLogin()">Sign In →</button>
   </div>
 </div>
 
-<!-- ═══════════════════ APP ═══════════════════ -->
+<!-- APP -->
 <div id="app-view">
-  <div id="topbar">
-    <div class="brand">🌿 EcoLens <span>Admin Console</span></div>
-    <div class="right">
-      <span class="admin-label" id="admin-name-lbl"></span>
-      <button class="btn btn-ghost btn-sm" onclick="doLogout()">Sign out</button>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="sb-brand">
+      <div class="logo">
+        <div class="logo-icon">🌿</div>
+        <div><div class="logo-text">Eco<span>Lens</span></div><div class="logo-sub">Admin Console</div></div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section-label">Dashboard</div>
+      <button class="nav-item active" id="nav-overview" onclick="switchTab('overview',this)"><span class="nav-icon">📊</span> Overview</button>
+      <div class="sb-section-label">Management</div>
+      <button class="nav-item" id="nav-kiosks" onclick="switchTab('kiosks',this)"><span class="nav-icon">♻️</span> Kiosks</button>
+      <button class="nav-item" id="nav-users" onclick="switchTab('users',this)"><span class="nav-icon">👥</span> Users</button>
+      <div class="sb-section-label">Finance</div>
+      <button class="nav-item" id="nav-redeem" onclick="switchTab('redeem',this)"><span class="nav-icon">💸</span> Redemptions</button>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-admin">
+        <div class="sb-admin-avatar" id="admin-avatar">A</div>
+        <div><div class="sb-admin-name" id="admin-name-lbl">Admin</div><div class="sb-admin-role">System Admin</div></div>
+      </div>
+      <button class="btn-signout" onclick="doLogout()"><span>⬅</span> Sign Out</button>
     </div>
   </div>
 
-  <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
-    <button class="tab-btn" onclick="switchTab('kiosks',this)">Kiosks</button>
-    <button class="tab-btn" onclick="switchTab('users',this)">Users</button>
-    <button class="tab-btn" onclick="switchTab('redeem',this)">Redemptions</button>
-  </div>
-
-  <div id="main">
-
-    <!-- Overview -->
-    <div class="section active" id="tab-overview">
-      <div class="page-header">
-        <div><div class="page-title">Overview</div><div class="page-sub">System-wide summary</div></div>
-        <button class="btn btn-ghost btn-sm" onclick="loadOverview()">↺ Refresh</button>
+  <!-- Main area -->
+  <div id="main-area">
+    <div id="topbar">
+      <div class="topbar-search">
+        <span style="color:var(--muted);font-size:14px">🔍</span>
+        <input type="text" id="global-search" placeholder="Search users, kiosks…" oninput="handleGlobalSearch(this.value)"/>
       </div>
-      <div id="overview-content"><div class="loading">Loading…</div></div>
+      <div class="topbar-right">
+        <div class="refresh-indicator" id="refresh-ind" style="display:none"><div class="refresh-dot"></div> Live</div>
+        <button class="btn btn-ghost btn-sm" onclick="refreshCurrent()">↺ Refresh</button>
+      </div>
     </div>
 
-    <!-- Kiosks -->
-    <div class="section" id="tab-kiosks">
-      <div class="page-header">
-        <div><div class="page-title">Kiosks</div><div class="page-sub">All registered kiosk units</div></div>
-        <div class="flex gap-8">
-          <button class="btn btn-ghost btn-sm" onclick="loadKiosks()">↺ Refresh</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-reg-kiosk')">+ Register Kiosk</button>
+    <div id="content">
+
+      <!-- Overview -->
+      <div class="section active" id="tab-overview">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-title">Overview</div><div class="page-sub">System-wide summary · auto-refreshes every 60s</div></div>
+          <div class="page-header-actions"><button class="btn btn-ghost btn-sm" onclick="loadOverview()">↺ Refresh</button></div>
         </div>
+        <div id="overview-content"><div id="ov-skeleton">
+          <div class="stats-strip">${[1,2,3,4,5,6].map(()=>'<div class="stat-card"><div class="skeleton" style="width:40px;height:32px;margin-bottom:8px"></div><div class="skeleton" style="width:80px;height:12px"></div></div>').join('')}</div>
+        </div></div>
       </div>
-      <div id="kiosks-content"><div class="loading">Loading…</div></div>
-    </div>
 
-    <!-- Users -->
-    <div class="section" id="tab-users">
-      <div class="page-header">
-        <div><div class="page-title">Users</div><div class="page-sub">All registered EcoLens users</div></div>
-        <div class="flex gap-8">
-          <button class="btn btn-ghost btn-sm" onclick="loadUsers()">↺ Refresh</button>
-          <button class="btn btn-primary btn-sm" onclick="openModal('modal-reg-user')">+ Register User</button>
+      <!-- Kiosks -->
+      <div class="section" id="tab-kiosks">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-title">Kiosks</div><div class="page-sub">Registered disposal units</div></div>
+          <div class="page-header-actions">
+            <button class="btn btn-ghost btn-sm" onclick="loadKiosks()">↺ Refresh</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-reg-kiosk')">+ Register Kiosk</button>
+          </div>
         </div>
+        <div id="kiosks-content"></div>
       </div>
-      <div id="users-content"><div class="loading">Loading…</div></div>
-    </div>
 
-    <!-- Redemptions -->
-    <div class="section" id="tab-redeem">
-      <div class="page-header">
-        <div><div class="page-title">Redemptions</div><div class="page-sub">Airtime payout history</div></div>
-        <button class="btn btn-ghost btn-sm" onclick="loadRedemptions()">↺ Refresh</button>
+      <!-- Users -->
+      <div class="section" id="tab-users">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-title">Users</div><div class="page-sub">All EcoLens accounts</div></div>
+          <div class="page-header-actions">
+            <button class="btn btn-ghost btn-sm" onclick="loadUsers()">↺ Refresh</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-reg-user')">+ Register User</button>
+          </div>
+        </div>
+        <div id="users-content"></div>
       </div>
-      <div id="redeem-content"><div class="loading">Loading…</div></div>
-    </div>
 
+      <!-- Redemptions -->
+      <div class="section" id="tab-redeem">
+        <div class="page-header">
+          <div class="page-header-left"><div class="page-title">Redemptions</div><div class="page-sub">Airtime payout history</div></div>
+          <div class="page-header-actions"><button class="btn btn-ghost btn-sm" onclick="loadRedemptions()">↺ Refresh</button></div>
+        </div>
+        <div id="redeem-content"></div>
+      </div>
+
+    </div>
   </div>
 </div>
 
-<!-- ═══════════════════ MODALS ═══════════════════ -->
-
-<!-- Register Kiosk -->
+<!-- MODAL: Register Kiosk -->
 <div class="modal-bg" id="modal-reg-kiosk">
   <div class="modal">
-    <div class="modal-head">
-      <h3>Register New Kiosk</h3>
-      <button class="modal-close" onclick="closeModal('modal-reg-kiosk')">×</button>
-    </div>
+    <div class="modal-head"><h3>♻️ Register New Kiosk</h3><button class="modal-close" onclick="closeModal('modal-reg-kiosk')">×</button></div>
     <div class="modal-body">
       <div id="rk-err" class="err-box" style="display:none"></div>
       <div id="rk-ok" style="display:none"></div>
-      <div class="form-group">
-        <label>Kiosk Name</label>
-        <input type="text" id="rk-name" placeholder="e.g. Nakawa Market Kiosk"/>
+      <div class="form-row">
+        <div class="form-group"><label>Kiosk Name</label><input type="text" id="rk-name" placeholder="e.g. Nakawa Market Kiosk"/></div>
+        <div class="form-group"><label>Location</label><input type="text" id="rk-loc" placeholder="e.g. Nakawa, Kampala"/></div>
       </div>
-      <div class="form-group">
-        <label>Location / Address</label>
-        <input type="text" id="rk-loc" placeholder="e.g. Nakawa Market, Kampala"/>
-      </div>
+      <div class="hint" style="margin-top:-8px">After registration you will receive a UUID to paste into <code>kiosk.py</code> as UNIT_ID.</div>
     </div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeModal('modal-reg-kiosk')">Cancel</button>
@@ -259,32 +359,19 @@ tr:hover td{background:#fbfdf9}
   </div>
 </div>
 
-<!-- Register User -->
+<!-- MODAL: Register User -->
 <div class="modal-bg" id="modal-reg-user">
   <div class="modal">
-    <div class="modal-head">
-      <h3>Register New User</h3>
-      <button class="modal-close" onclick="closeModal('modal-reg-user')">×</button>
-    </div>
+    <div class="modal-head"><h3>👤 Register New User</h3><button class="modal-close" onclick="closeModal('modal-reg-user')">×</button></div>
     <div class="modal-body">
       <div id="ru-err" class="err-box" style="display:none"></div>
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="ru-name" placeholder="e.g. Amina Nakato"/>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name</label><input type="text" id="ru-name" placeholder="e.g. Amina Nakato"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="ru-email" placeholder="user@example.com"/></div>
       </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="ru-email" placeholder="user@example.com"/>
-      </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="tel" id="ru-phone" placeholder="e.g. 0771234567"/>
-        <div class="hint">MTN or Airtel Uganda number for airtime redemption</div>
-      </div>
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" id="ru-pass" placeholder="Temporary password"/>
-        <div class="hint">User can change this after logging in to the mobile app</div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone Number</label><input type="tel" id="ru-phone" placeholder="e.g. 0771234567"/><div class="hint">MTN or Airtel Uganda</div></div>
+        <div class="form-group"><label>Password</label><input type="password" id="ru-pass" placeholder="Temporary password"/></div>
       </div>
     </div>
     <div class="modal-foot">
@@ -300,389 +387,451 @@ tr:hover td{background:#fbfdf9}
 'use strict';
 const API = 'https://eco-lens-production.up.railway.app';
 let token = null;
+let _allUsers = [];
+let _reFilter = 'all';
+let _autoRefreshTimer = null;
+let _currentTab = 'overview';
 
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function fmt(d){ if(!d)return'—'; try{return new Date(d).toLocaleString('en-UG',{dateStyle:'medium',timeStyle:'short'});}catch(e){return new Date(d).toLocaleString();} }
+function timeAgo(d){ if(!d)return{text:'Never',cls:'seen-old'}; var s=(Date.now()-new Date(d))/1000; if(s<120)return{text:'Just now',cls:'seen-online'}; if(s<3600)return{text:Math.floor(s/60)+'m ago',cls:'seen-recent'}; if(s<86400)return{text:Math.floor(s/3600)+'h ago',cls:'seen-recent'}; return{text:Math.floor(s/86400)+'d ago',cls:'seen-old'}; }
+function network(phone){ if(!phone)return{n:'Unknown',cls:'badge-gray'}; var d=phone.replace(/\D/g,''),local=d.length>9?d.slice(-9):d,p=local.slice(0,2); if(['77','78','76','39'].indexOf(p)>-1)return{n:'MTN',cls:'badge-amber'}; if(['70','75','74','20'].indexOf(p)>-1)return{n:'Airtel',cls:'badge-red'}; return{n:'Other',cls:'badge-gray'}; }
+
+function showToast(msg, ok){
+  ok = ok !== false;
+  var t = document.getElementById('toast'), d = document.createElement('div');
+  d.className = 'toast-item ' + (ok ? 'toast-ok' : 'toast-err');
+  d.innerHTML = (ok ? '✓ ' : '✗ ') + esc(msg);
+  t.appendChild(d);
+  setTimeout(function(){ d.style.animation='toastIn .25s reverse'; setTimeout(function(){d.remove();},250); }, 3500);
 }
-function showToast(msg,ok){
-  ok=ok!==false;
-  var t=document.getElementById('toast'),d=document.createElement('div');
-  d.className='toast-item '+(ok?'toast-ok':'toast-err');d.textContent=msg;t.appendChild(d);
-  setTimeout(function(){d.remove()},3800);
-}
-function fmt(d){
-  if(!d)return'—';
-  try{return new Date(d).toLocaleString('en-UG',{dateStyle:'medium',timeStyle:'short'});}catch(e){return new Date(d).toLocaleString();}
-}
-function timeAgo(d){
-  if(!d)return{text:'Never',cls:'seen-old'};
-  var s=(Date.now()-new Date(d))/1000;
-  if(s<120)return{text:'Just now',cls:'seen-online'};
-  if(s<3600)return{text:Math.floor(s/60)+'m ago',cls:'seen-recent'};
-  if(s<86400)return{text:Math.floor(s/3600)+'h ago',cls:'seen-recent'};
-  return{text:Math.floor(s/86400)+'d ago',cls:'seen-old'};
-}
-function network(phone){
-  if(!phone)return{n:'?',cls:'badge-gray'};
-  var d=phone.replace(/\D/g,''),local=d.length>9?d.slice(-9):d,p=local.slice(0,2);
-  if(['77','78','76','39'].indexOf(p)>-1)return{n:'MTN',cls:'badge-amber'};
-  if(['70','75','74','20'].indexOf(p)>-1)return{n:'Airtel',cls:'badge-red'};
-  return{n:'?',cls:'badge-gray'};
-}
-function copyText(text,btn){
+
+function copyText(text, btn){
   navigator.clipboard.writeText(text).then(function(){
-    var prev=btn.textContent;btn.textContent='✓ Copied';
-    setTimeout(function(){btn.textContent=prev;},2000);
-  });
+    var prev = btn.textContent; btn.textContent = '✓ Copied!';
+    setTimeout(function(){ btn.textContent = prev; }, 2000);
+  }).catch(function(){ showToast('Copy failed', false); });
 }
-async function apiFetch(path,opts){
-  opts=opts||{};
-  var headers={'Content-Type':'application/json'};
-  if(token)headers['Authorization']='Bearer '+token;
-  var res=await fetch(API+path,Object.assign({},opts,{headers:headers}));
-  var json=await res.json().catch(function(){return{};});
-  if(!res.ok)throw new Error(json.error||json.message||('HTTP '+res.status));
+
+async function apiFetch(path, opts){
+  opts = opts || {};
+  var headers = {'Content-Type':'application/json'};
+  if(token) headers['Authorization'] = 'Bearer ' + token;
+  var res = await fetch(API + path, Object.assign({}, opts, {headers:headers}));
+  var json = await res.json().catch(function(){ return {}; });
+  if(!res.ok) throw new Error(json.error || json.message || ('HTTP ' + res.status));
   return json;
 }
-function openModal(id){document.getElementById(id).classList.add('open');}
+
+function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){
   document.getElementById(id).classList.remove('open');
-  var e=document.querySelector('#'+id+' .err-box');if(e){e.style.display='none';e.textContent='';}
-  var ok=document.getElementById('rk-ok');if(ok)ok.style.display='none';
+  var e = document.querySelector('#' + id + ' .err-box'); if(e){e.style.display='none';e.textContent='';}
+  var ok = document.getElementById('rk-ok'); if(ok) ok.style.display = 'none';
 }
 document.querySelectorAll('.modal-bg').forEach(function(bg){
-  bg.addEventListener('click',function(e){if(e.target===bg)closeModal(bg.id);});
+  bg.addEventListener('click', function(e){ if(e.target===bg) closeModal(bg.id); });
 });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') document.querySelectorAll('.modal-bg.open').forEach(function(m){closeModal(m.id);}); });
 
 /* ── Auth ── */
 async function doLogin(){
-  var email=document.getElementById('l-email').value.trim();
-  var pass=document.getElementById('l-pass').value;
-  var errEl=document.getElementById('login-err');
-  var btn=document.getElementById('l-btn');
-  errEl.style.display='none';
-  if(!email||!pass){errEl.textContent='Enter email and password';errEl.style.display='block';return;}
-  btn.disabled=true;btn.textContent='Signing in…';
+  var email = document.getElementById('l-email').value.trim();
+  var pass = document.getElementById('l-pass').value;
+  var errEl = document.getElementById('login-err');
+  var btn = document.getElementById('l-btn');
+  errEl.style.display = 'none';
+  if(!email || !pass){ errEl.textContent='Enter email and password'; errEl.style.display='block'; return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
   try{
-    var data=await apiFetch('/api/admin/login',{method:'POST',body:JSON.stringify({email:email,password:pass})});
-    token=data.token;
-    document.getElementById('admin-name-lbl').textContent=(data.admin&&data.admin.name)||email;
-    document.getElementById('login-view').style.display='none';
-    document.getElementById('app-view').style.display='flex';
-    loadOverview();loadKiosks();
-  }catch(e){errEl.textContent=e.message;errEl.style.display='block';}
-  finally{btn.disabled=false;btn.textContent='Sign In';}
+    var data = await apiFetch('/api/admin/login', {method:'POST', body:JSON.stringify({email:email, password:pass})});
+    token = data.token;
+    var name = (data.admin && data.admin.name) || email;
+    document.getElementById('admin-name-lbl').textContent = name;
+    document.getElementById('admin-avatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('login-view').style.display = 'none';
+    document.getElementById('app-view').style.display = 'block';
+    document.getElementById('refresh-ind').style.display = 'flex';
+    switchTab('overview', document.getElementById('nav-overview'));
+    startAutoRefresh();
+  } catch(e){ errEl.textContent = e.message; errEl.style.display = 'block'; }
+  finally{ btn.disabled = false; btn.textContent = 'Sign In →'; }
 }
-document.getElementById('l-pass').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+document.getElementById('l-pass').addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+document.getElementById('l-email').addEventListener('keydown', function(e){ if(e.key==='Enter') document.getElementById('l-pass').focus(); });
+
 function doLogout(){
-  token=null;
-  Object.keys(tabLoaded).forEach(function(k){tabLoaded[k]=false;});
-  document.getElementById('app-view').style.display='none';
-  document.getElementById('login-view').style.display='flex';
-  document.getElementById('l-pass').value='';
+  token = null; _allUsers = []; _currentTab = 'overview';
+  clearInterval(_autoRefreshTimer);
+  document.getElementById('app-view').style.display = 'none';
+  document.getElementById('login-view').style.display = 'flex';
+  document.getElementById('l-pass').value = '';
+  document.querySelectorAll('.section').forEach(function(s){ s.innerHTML = ''; });
+}
+
+function startAutoRefresh(){
+  clearInterval(_autoRefreshTimer);
+  _autoRefreshTimer = setInterval(function(){
+    if(_currentTab === 'overview') loadOverview();
+  }, 60000);
+}
+
+function refreshCurrent(){
+  if(_currentTab === 'overview') loadOverview();
+  else if(_currentTab === 'kiosks') loadKiosks();
+  else if(_currentTab === 'users') loadUsers();
+  else if(_currentTab === 'redeem') loadRedemptions();
 }
 
 /* ── Tabs ── */
-var tabLoaded={overview:false,kiosks:false,users:false,redeem:false};
-var tabLoaders={overview:loadOverview,kiosks:loadKiosks,users:loadUsers,redeem:loadRedemptions};
-function switchTab(name,btn){
-  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+var tabLoaded = {overview:false, kiosks:false, users:false, redeem:false};
+var tabLoaders = {overview:loadOverview, kiosks:loadKiosks, users:loadUsers, redeem:loadRedemptions};
+function switchTab(name, btn){
+  _currentTab = name;
+  document.querySelectorAll('.nav-item').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
-  document.getElementById('tab-'+name).classList.add('active');
-  if(!tabLoaded[name]){tabLoaded[name]=true;tabLoaders[name]();}
+  document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  if(!tabLoaded[name]){ tabLoaded[name] = true; tabLoaders[name](); }
+}
+
+/* ── Global search ── */
+function handleGlobalSearch(q){
+  q = q.toLowerCase().trim();
+  if(_currentTab === 'users' && _allUsers.length){
+    var filtered = !q ? _allUsers : _allUsers.filter(function(u){
+      return (u.name||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q) ||
+             (u.phone||'').toLowerCase().includes(q) || (u.userCode||'').toLowerCase().includes(q);
+    });
+    renderUsers(document.getElementById('users-content'), filtered);
+  }
 }
 
 /* ── Overview ── */
 async function loadOverview(){
-  tabLoaded.overview=true;
-  var el=document.getElementById('overview-content');
-  el.innerHTML='<div class="loading">Loading…</div>';
+  tabLoaded.overview = true;
+  var el = document.getElementById('overview-content');
   try{
-    var d=await apiFetch('/api/admin/overview');
-    el.innerHTML=
-      '<div class="stats-strip">'+
-      '<div class="stat-card"><div class="stat-num">'+d.totalKiosks+'</div><div class="stat-lbl">Total Kiosks</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--leaf-bright)"><div class="stat-num">'+d.activeKiosks+'</div><div class="stat-lbl">Active Kiosks</div></div>'+
-      '<div class="stat-card" style="border-left-color:#1a6fa8"><div class="stat-num">'+d.totalUsers+'</div><div class="stat-lbl">Registered Users</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--amber)"><div class="stat-num">'+d.totalDisposals+'</div><div class="stat-lbl">Total Disposals</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--leaf-bright)"><div class="stat-num">'+d.acceptedDisposals+'</div><div class="stat-lbl">Plastics Accepted</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--amber)"><div class="stat-num">'+Number(d.totalPointsAwarded).toLocaleString()+'</div><div class="stat-lbl">Points Awarded</div></div>'+
-      '</div>'+
-      '<div class="card"><div class="card-body" style="color:var(--muted);font-size:13px;line-height:2">'+
-      '<strong style="color:var(--ink)">Quick actions</strong><br>'+
-      'Switch to <strong>Kiosks</strong> to register or monitor kiosk units and reset their bins.<br>'+
-      'Switch to <strong>Users</strong> to register new users or deactivate existing accounts.<br>'+
-      'Switch to <strong>Redemptions</strong> to view all airtime payout records.</div></div>';
-  }catch(e){
-    el.innerHTML='<div class="err-box">Failed to load overview: '+esc(e.message)+'</div>';
+    var d = await apiFetch('/api/admin/overview');
+    var acceptRate = d.totalDisposals > 0 ? ((d.acceptedDisposals / d.totalDisposals) * 100).toFixed(1) : '0';
+    el.innerHTML =
+      '<div class="stats-strip">' +
+      '<div class="stat-card green"><div class="stat-icon">♻️</div><div class="stat-num">' + (d.totalDisposals||0).toLocaleString() + '</div><div class="stat-lbl">Total Disposals</div><div class="stat-trend">↑ Lifetime</div></div>' +
+      '<div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-num">' + (d.acceptedDisposals||0).toLocaleString() + '</div><div class="stat-lbl">Plastics Accepted</div><div class="stat-trend">' + acceptRate + '% acceptance</div></div>' +
+      '<div class="stat-card amber"><div class="stat-icon">⭐</div><div class="stat-num">' + Number(d.totalPointsAwarded||0).toLocaleString() + '</div><div class="stat-lbl">Points Awarded</div><div class="stat-trend">UGX ' + Number(d.totalPointsAwarded||0).toLocaleString() + ' value</div></div>' +
+      '<div class="stat-card blue"><div class="stat-icon">👥</div><div class="stat-num">' + (d.totalUsers||0).toLocaleString() + '</div><div class="stat-lbl">Registered Users</div></div>' +
+      '<div class="stat-card green"><div class="stat-icon">🏪</div><div class="stat-num">' + (d.activeKiosks||0) + ' <span style="font-size:14px;color:var(--muted)">/ ' + (d.totalKiosks||0) + '</span></div><div class="stat-lbl">Active Kiosks</div></div>' +
+      '<div class="stat-card teal"><div class="stat-icon">📈</div><div class="stat-num">' + acceptRate + '%</div><div class="stat-lbl">Acceptance Rate</div></div>' +
+      '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">' +
+      '<div class="card"><div class="card-header"><div class="card-title">♻️ Disposal Summary</div></div><div class="card-body">' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px">' +
+      '<span style="color:var(--muted)">Accepted</span><span style="font-weight:700;color:var(--leaf-bright)">' + (d.acceptedDisposals||0).toLocaleString() + '</span></div>' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px">' +
+      '<span style="color:var(--muted)">Rejected</span><span style="font-weight:700;color:var(--red)">' + ((d.totalDisposals||0)-(d.acceptedDisposals||0)).toLocaleString() + '</span></div>' +
+      '<div style="display:flex;justify-content:space-between;margin-bottom:12px;font-size:13px">' +
+      '<span style="color:var(--muted)">Acceptance Rate</span><span style="font-weight:700">' + acceptRate + '%</span></div>' +
+      '<div style="background:var(--bg);border-radius:99px;height:8px;overflow:hidden">' +
+      '<div style="height:100%;border-radius:99px;background:var(--leaf-bright);width:' + acceptRate + '%"></div></div>' +
+      '</div></div>' +
+      '<div class="card"><div class="card-header"><div class="card-title">🚀 Quick Actions</div></div><div class="card-body">' +
+      '<div style="display:flex;flex-direction:column;gap:10px">' +
+      '<button class="btn btn-primary btn-sm" style="justify-content:flex-start" onclick="switchTab(\'kiosks\',document.getElementById(\'nav-kiosks\'))">♻️ &nbsp;Manage Kiosks →</button>' +
+      '<button class="btn btn-ghost btn-sm" style="justify-content:flex-start" onclick="openModal(\'modal-reg-kiosk\')">+ &nbsp;Register New Kiosk</button>' +
+      '<button class="btn btn-ghost btn-sm" style="justify-content:flex-start" onclick="switchTab(\'users\',document.getElementById(\'nav-users\'))">👥 &nbsp;Manage Users →</button>' +
+      '<button class="btn btn-ghost btn-sm" style="justify-content:flex-start" onclick="openModal(\'modal-reg-user\')">+ &nbsp;Register New User</button>' +
+      '<button class="btn btn-ghost btn-sm" style="justify-content:flex-start" onclick="switchTab(\'redeem\',document.getElementById(\'nav-redeem\'))">💸 &nbsp;View Redemptions →</button>' +
+      '</div></div></div>' +
+      '</div>' +
+      '<div class="card"><div class="card-header"><div class="card-title">💡 System Status</div><span class="badge badge-green">● Operational</span></div>' +
+      '<div class="card-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px">' +
+      '<div style="font-size:13px"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Rate per Disposal</div><div style="font-weight:700">50 points</div></div>' +
+      '<div style="font-size:13px"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Exchange Rate</div><div style="font-weight:700">1 pt = UGX 1</div></div>' +
+      '<div style="font-size:13px"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Min Redemption</div><div style="font-weight:700">100 pts (UGX 100)</div></div>' +
+      '<div style="font-size:13px"><div style="color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Backend</div><div style="font-weight:700;color:var(--leaf-bright)">● Railway</div></div>' +
+      '</div></div>';
+  } catch(e){
+    el.innerHTML = '<div class="err-box">Failed to load overview: ' + esc(e.message) + '</div>';
   }
 }
 
 /* ── Kiosks ── */
 async function loadKiosks(){
-  tabLoaded.kiosks=true;
-  var el=document.getElementById('kiosks-content');
-  el.innerHTML='<div class="loading">Loading kiosks…</div>';
+  tabLoaded.kiosks = true;
+  var el = document.getElementById('kiosks-content');
+  el.innerHTML = '<div class="card"><div class="card-body"><div class="empty"><div class="empty-ico">⏳</div><p>Loading kiosks…</p></div></div></div>';
   try{
-    var data=await apiFetch('/api/admin/kiosks');
-    renderKiosks(el,data.kiosks||[]);
-  }catch(e){
-    el.innerHTML='<div class="err-box">Failed to load kiosks: '+esc(e.message)+'</div>';
+    var data = await apiFetch('/api/admin/kiosks');
+    renderKiosks(el, data.kiosks || []);
+  } catch(e){
+    el.innerHTML = '<div class="err-box">Failed to load kiosks: ' + esc(e.message) + '</div>';
   }
 }
-function renderKiosks(el,kiosks){
+function renderKiosks(el, kiosks){
   if(!kiosks.length){
-    el.innerHTML='<div class="card"><div class="empty"><div class="empty-ico">🏪</div><div>No kiosks registered yet.</div>'+
-      '<div style="margin-top:12px"><button class="btn btn-primary" onclick="openModal(\'modal-reg-kiosk\')">Register First Kiosk</button></div></div></div>';
+    el.innerHTML = '<div class="card"><div class="empty"><div class="empty-ico">♻️</div><h3>No kiosks registered yet</h3><p>Register your first disposal unit to get started.</p><button class="btn btn-primary" onclick="openModal(\'modal-reg-kiosk\')">+ Register Kiosk</button></div></div>';
     return;
   }
-  var now=Date.now();
-  var cards=kiosks.map(function(k){
-    var bottles=k.currentBottleCount||0,capacity=k.capacity||10;
-    var pct=Math.min((bottles/capacity)*100,100);
-    var barCls=pct<70?'cap-green':pct<90?'cap-amber':'cap-red';
-    var online=k.lastSeenAt&&(now-new Date(k.lastSeenAt))<5*60*1000;
-    var seen=timeAgo(k.lastSeenAt);
-    var cardCls=k.isFull?'full':(k.status==='offline'?'offline':'');
-    var statusBadge=k.isFull
-      ?'<span class="badge badge-red">● Full</span>'
-      :online?'<span class="badge badge-green">● Online</span>'
-      :k.status==='active'?'<span class="badge badge-amber">● Active</span>'
-      :'<span class="badge badge-gray">● '+esc(k.status)+'</span>';
-    var resetBtn=bottles>0?'<button class="btn btn-danger btn-sm" onclick="resetKiosk(\''+k.id+'\')">🗑 Reset Bin</button>':'';
-    return '<div class="kiosk-card '+cardCls+'">'+
-      '<div class="kc-head">'+
-      '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
-      '<div><div class="kc-name">'+esc(k.unitName)+'</div><div class="kc-loc">📍 '+esc(k.location)+'</div>'+
-      '<div class="kc-code">Code: '+esc(k.unitCode)+'</div></div>'+statusBadge+'</div>'+
-      '<div class="kc-uuid">'+esc(k.id)+' <button class="copy-btn" onclick="copyText(\''+esc(k.id)+'\',this)">Copy ID</button></div>'+
-      '</div>'+
-      '<div class="kc-body">'+
-      '<div class="cap-lbl"><span>Bin: '+bottles+'/'+capacity+' bottles</span><span class="'+seen.cls+'">'+seen.text+'</span></div>'+
-      '<div class="cap-wrap"><div class="cap-bar '+barCls+'" style="width:'+pct+'%"></div></div>'+
-      '<div class="kc-row"><span>Sessions</span><strong>'+k.stats.totalSessions+'</strong></div>'+
-      '<div class="kc-row"><span>Accepted / Total</span><strong>'+k.stats.acceptedDisposals+' / '+k.stats.totalDisposals+'</strong></div>'+
-      '<div class="kc-row"><span>Points Awarded</span><strong>'+Number(k.stats.totalPointsAwarded).toLocaleString()+'</strong></div>'+
-      '</div>'+
-      '<div class="kc-foot">'+resetBtn+'<button class="btn btn-ghost btn-sm" onclick="viewKiosk(\''+k.id+'\')">Details →</button></div>'+
+  var now = Date.now();
+  var cards = kiosks.map(function(k){
+    var bottles = k.currentBottleCount || 0, capacity = k.capacity || 10;
+    var pct = Math.min((bottles / capacity) * 100, 100);
+    var barCls = pct < 70 ? 'cap-green' : pct < 90 ? 'cap-amber' : 'cap-red';
+    var online = k.lastSeenAt && (now - new Date(k.lastSeenAt)) < 5 * 60 * 1000;
+    var seen = timeAgo(k.lastSeenAt);
+    var stripCls = k.isFull ? 'full' : online ? 'online' : 'offline';
+    var statusBadge = k.isFull
+      ? '<span class="badge badge-red">🔴 Full</span>'
+      : online ? '<span class="badge badge-green">🟢 Online</span>'
+      : '<span class="badge badge-gray">⚫ Offline</span>';
+    var resetBtn = bottles > 0
+      ? '<button class="btn btn-danger btn-xs" onclick="resetKiosk(\'' + k.id + '\')">🗑 Reset Bin</button>'
+      : '<span style="font-size:11px;color:var(--muted)">Bin empty</span>';
+    var accepted = k.stats ? k.stats.acceptedDisposals : 0;
+    var total = k.stats ? k.stats.totalDisposals : 0;
+    var pts = k.stats ? Number(k.stats.totalPointsAwarded).toLocaleString() : '0';
+    return '<div class="kiosk-card">' +
+      '<div class="kc-top-stripe ' + stripCls + '"></div>' +
+      '<div class="kc-head">' +
+      '<div><div class="kc-name">🏪 ' + esc(k.unitName) + '</div><div class="kc-loc">📍 ' + esc(k.location) + '</div><div class="kc-code">Code: ' + esc(k.unitCode) + '</div></div>' +
+      statusBadge +
+      '</div>' +
+      '<div class="kc-uuid">' + esc(k.id) + ' <button class="copy-btn" onclick="copyText(\'' + esc(k.id) + '\',this)">Copy ID</button></div>' +
+      '<div class="kc-body">' +
+      '<div class="cap-label"><span>Bin: ' + bottles + ' / ' + capacity + '</span><span>' + pct.toFixed(0) + '% full</span></div>' +
+      '<div class="cap-wrap"><div class="cap-bar ' + barCls + '" style="width:' + pct + '%"></div></div>' +
+      '<div class="kc-stat-row">' +
+      '<div class="kc-mini-stat"><div class="kc-mini-num">' + (k.stats ? k.stats.totalSessions : 0) + '</div><div class="kc-mini-lbl">Sessions</div></div>' +
+      '<div class="kc-mini-stat"><div class="kc-mini-num" style="color:var(--leaf-bright)">' + accepted + '</div><div class="kc-mini-lbl">Accepted</div></div>' +
+      '<div class="kc-mini-stat"><div class="kc-mini-num" style="color:var(--amber)">' + pts + '</div><div class="kc-mini-lbl">Points</div></div>' +
+      '</div>' +
+      '</div>' +
+      '<div class="kc-lastseen">🕐 Last seen: <span class="' + seen.cls + '">' + seen.text + '</span></div>' +
+      '<div class="kc-foot">' + resetBtn + '<button class="btn btn-ghost btn-xs" onclick="viewKiosk(\'' + k.id + '\')">Details →</button></div>' +
       '</div>';
   }).join('');
-  el.innerHTML='<div class="kiosk-grid">'+cards+'</div>';
+  el.innerHTML = '<div class="kiosk-grid">' + cards + '</div>';
 }
 async function resetKiosk(id){
-  if(!confirm('Confirm: the kiosk bin has been physically emptied and is ready for new bottles?'))return;
+  if(!confirm('Confirm: the kiosk bin has been physically emptied?')) return;
   try{
-    await apiFetch('/api/admin/kiosks/'+id+'/reset-capacity',{method:'POST'});
-    showToast('Bin reset — kiosk resumes accepting bottles within 60 s');
+    await apiFetch('/api/admin/kiosks/' + id + '/reset-capacity', {method:'POST'});
+    showToast('Bin reset — kiosk will resume accepting within 60s');
     loadKiosks();
-  }catch(e){showToast('Reset failed: '+e.message,false);}
+  } catch(e){ showToast('Reset failed: ' + e.message, false); }
 }
 async function viewKiosk(id){
-  var el=document.getElementById('kiosks-content');
-  el.innerHTML='<div class="loading">Loading kiosk details…</div>';
+  var el = document.getElementById('kiosks-content');
+  el.innerHTML = '<div class="card"><div class="card-body"><div class="empty"><div class="empty-ico">⏳</div><p>Loading kiosk details…</p></div></div></div>';
   try{
-    var k=await apiFetch('/api/admin/kiosks/'+id);
-    var bottles=k.currentBottleCount||0,capacity=k.capacity||10;
-    var pct=Math.min((bottles/capacity)*100,100);
-    var barCls=pct<70?'cap-green':pct<90?'cap-amber':'cap-red';
-    var seen=timeAgo(k.lastSeenAt);
-    var evRows=(k.recentEvents||[]).map(function(ev){
-      return '<tr>'+
-        '<td class="muted" style="font-size:12px">'+fmt(ev.createdAt)+'</td>'+
-        '<td class="mono">'+esc(ev.classifiedAs||'—')+'</td>'+
-        '<td class="muted">'+((ev.confidence||0)*100).toFixed(0)+'%</td>'+
-        '<td>'+(ev.isPlastic?'<span class="badge badge-green">✓ Accepted</span>':'<span class="badge badge-red">✗ Rejected</span>')+'</td>'+
-        '<td style="color:var(--amber);font-weight:600">'+(ev.pointsAwarded>0?'+'+ev.pointsAwarded:'—')+'</td>'+
+    var k = await apiFetch('/api/admin/kiosks/' + id);
+    var bottles = k.currentBottleCount || 0, capacity = k.capacity || 10;
+    var pct = Math.min((bottles / capacity) * 100, 100);
+    var barCls = pct < 70 ? 'cap-green' : pct < 90 ? 'cap-amber' : 'cap-red';
+    var seen = timeAgo(k.lastSeenAt);
+    var evRows = (k.recentEvents || []).map(function(ev){
+      var label = (ev.classifiedAs || 'unknown').replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();});
+      return '<tr>' +
+        '<td class="text-muted" style="font-size:12px">' + fmt(ev.createdAt) + '</td>' +
+        '<td style="font-weight:500">' + esc(label) + '</td>' +
+        '<td><div style="display:flex;align-items:center;gap:6px"><div style="background:var(--bg);border-radius:99px;height:6px;width:60px;overflow:hidden"><div style="height:100%;border-radius:99px;background:var(--leaf-bright);width:' + ((ev.confidence||0)*100).toFixed(0) + '%"></div></div><span style="font-size:11px;color:var(--muted)">' + ((ev.confidence||0)*100).toFixed(0) + '%</span></div></td>' +
+        '<td>' + (ev.isPlastic ? '<span class="badge badge-green">✓ Accepted</span>' : '<span class="badge badge-red">✗ Rejected</span>') + '</td>' +
+        '<td style="color:var(--amber);font-weight:700">' + (ev.pointsAwarded > 0 ? '+' + ev.pointsAwarded : '—') + '</td>' +
         '</tr>';
-    }).join('')||'<tr><td colspan="5" style="padding:20px;text-align:center;color:var(--muted)">No events yet</td></tr>';
-    el.innerHTML=
-      '<button class="btn btn-ghost btn-sm" style="margin-bottom:16px" onclick="loadKiosks()">← Back to Kiosks</button>'+
-      '<div class="card" style="margin-bottom:16px"><div class="card-header">'+
-      '<div><div class="card-title">'+esc(k.unitName)+'</div>'+
-      '<div style="font-size:12px;color:var(--muted);margin-top:2px">📍 '+esc(k.location)+' &nbsp;·&nbsp; Code: <span class="mono" style="color:var(--leaf-bright)">'+esc(k.unitCode)+'</span></div>'+
-      '<div style="font-size:11px;font-family:monospace;color:var(--muted);margin-top:3px">'+esc(k.id)+' <button class="copy-btn" onclick="copyText(\''+esc(k.id)+'\',this)">Copy ID</button></div></div>'+
-      '<div style="text-align:right"><div style="font-size:12px;color:var(--muted)">Last seen</div><div class="'+seen.cls+'" style="font-size:14px;font-weight:600">'+seen.text+'</div></div>'+
-      '</div><div class="card-body">'+
-      '<div class="stats-strip" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:16px">'+
-      '<div class="stat-card"><div class="stat-num">'+k.stats.totalSessions+'</div><div class="stat-lbl">Sessions</div></div>'+
-      '<div class="stat-card"><div class="stat-num">'+k.stats.totalDisposals+'</div><div class="stat-lbl">Total Scans</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--leaf-bright)"><div class="stat-num">'+k.stats.acceptedDisposals+'</div><div class="stat-lbl">Accepted</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--red)"><div class="stat-num">'+k.stats.rejectedDisposals+'</div><div class="stat-lbl">Rejected</div></div>'+
-      '<div class="stat-card" style="border-left-color:var(--amber)"><div class="stat-num">'+Number(k.stats.totalPointsAwarded).toLocaleString()+'</div><div class="stat-lbl">Points</div></div>'+
-      '</div>'+
-      '<div class="section-label">Bin Capacity</div>'+
-      '<div class="cap-lbl"><span>'+bottles+' of '+capacity+' bottles</span><span>'+pct.toFixed(0)+'% full</span></div>'+
-      '<div class="cap-wrap" style="height:14px;margin:6px 0 8px"><div class="cap-bar '+barCls+'" style="width:'+pct+'%"></div></div>'+
-      (bottles>0?'<button class="btn btn-danger btn-sm" onclick="resetKiosk(\''+k.id+'\');setTimeout(function(){viewKiosk(\''+k.id+'\')},900)">🗑 Reset Bin (physically emptied)</button>':'<span style="font-size:12px;color:var(--muted)">Bin is empty</span>')+
-      '</div></div>'+
-      '<div class="card"><div class="card-header"><div class="card-title">Recent Disposal Events</div>'+
-      '<span class="badge badge-gray">'+((k.recentEvents||[]).length)+' shown</span></div>'+
-      '<div class="table-wrap"><table>'+
-      '<thead><tr><th>Date / Time</th><th>Classification</th><th>Confidence</th><th>Result</th><th>Points</th></tr></thead>'+
-      '<tbody>'+evRows+'</tbody></table></div></div>';
-  }catch(e){
-    el.innerHTML='<div class="err-box">Failed to load kiosk: '+esc(e.message)+'</div>'+
+    }).join('') || '<tr><td colspan="5" style="padding:30px;text-align:center;color:var(--muted)">No events recorded yet</td></tr>';
+    el.innerHTML =
+      '<button class="btn btn-ghost btn-sm" style="margin-bottom:16px" onclick="loadKiosks()">← Back to Kiosks</button>' +
+      '<div class="card" style="margin-bottom:16px"><div class="card-header">' +
+      '<div><div class="card-title">🏪 ' + esc(k.unitName) + '</div>' +
+      '<div style="font-size:12px;color:var(--muted);margin-top:3px">📍 ' + esc(k.location) + ' &nbsp;·&nbsp; Code: <span class="mono" style="color:var(--leaf-bright);font-weight:700">' + esc(k.unitCode) + '</span></div>' +
+      '<div style="font-size:11px;font-family:monospace;color:var(--muted);margin-top:4px">' + esc(k.id) + ' <button class="copy-btn" onclick="copyText(\'' + esc(k.id) + '\',this)">Copy ID</button></div></div>' +
+      '<div style="text-align:right"><div class="text-muted" style="font-size:11px">Last seen</div><div class="' + seen.cls + '" style="font-size:14px;font-weight:600">' + seen.text + '</div></div>' +
+      '</div><div class="card-body">' +
+      '<div class="stats-strip" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:16px">' +
+      '<div class="stat-card"><div class="stat-num">' + (k.stats ? k.stats.totalSessions : 0) + '</div><div class="stat-lbl">Sessions</div></div>' +
+      '<div class="stat-card"><div class="stat-num">' + (k.stats ? k.stats.totalDisposals : 0) + '</div><div class="stat-lbl">Total Scans</div></div>' +
+      '<div class="stat-card green"><div class="stat-num">' + (k.stats ? k.stats.acceptedDisposals : 0) + '</div><div class="stat-lbl">Accepted</div></div>' +
+      '<div class="stat-card red"><div class="stat-num">' + (k.stats ? k.stats.rejectedDisposals : 0) + '</div><div class="stat-lbl">Rejected</div></div>' +
+      '<div class="stat-card amber"><div class="stat-num">' + Number(k.stats ? k.stats.totalPointsAwarded : 0).toLocaleString() + '</div><div class="stat-lbl">Points</div></div>' +
+      '</div>' +
+      '<div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px">Bin Capacity</div>' +
+      '<div class="cap-label" style="margin-bottom:4px"><span>' + bottles + ' of ' + capacity + ' bottles</span><span>' + pct.toFixed(0) + '% full</span></div>' +
+      '<div class="cap-wrap" style="height:12px;margin-bottom:12px"><div class="cap-bar ' + barCls + '" style="width:' + pct + '%"></div></div>' +
+      (bottles > 0 ? '<button class="btn btn-danger btn-sm" onclick="resetKiosk(\'' + k.id + '\');setTimeout(function(){viewKiosk(\'' + k.id + '\')},900)">🗑 Reset Bin (physically emptied)</button>' : '<span style="font-size:12px;color:var(--leaf-bright);font-weight:600">✓ Bin is empty</span>') +
+      '</div></div>' +
+      '<div class="card"><div class="card-header"><div class="card-title">📋 Recent Disposal Events</div><span class="badge badge-gray">' + ((k.recentEvents || []).length) + ' shown</span></div>' +
+      '<div class="table-wrap"><table>' +
+      '<thead><tr><th>Date / Time</th><th>Classification</th><th>Confidence</th><th>Result</th><th>Points</th></tr></thead>' +
+      '<tbody>' + evRows + '</tbody></table></div></div>';
+  } catch(e){
+    el.innerHTML = '<div class="err-box">Failed to load kiosk: ' + esc(e.message) + '</div>' +
       '<button class="btn btn-ghost btn-sm" onclick="loadKiosks()">← Back</button>';
   }
 }
 async function doRegisterKiosk(){
-  var name=document.getElementById('rk-name').value.trim();
-  var loc=document.getElementById('rk-loc').value.trim();
-  var errEl=document.getElementById('rk-err');
-  var okEl=document.getElementById('rk-ok');
-  var btn=document.getElementById('rk-btn');
-  errEl.style.display='none';okEl.style.display='none';
-  if(!name||!loc){errEl.textContent='Please fill in both fields';errEl.style.display='block';return;}
-  btn.disabled=true;btn.textContent='Registering…';
+  var name = document.getElementById('rk-name').value.trim();
+  var loc = document.getElementById('rk-loc').value.trim();
+  var errEl = document.getElementById('rk-err'), okEl = document.getElementById('rk-ok'), btn = document.getElementById('rk-btn');
+  errEl.style.display = 'none'; okEl.style.display = 'none';
+  if(!name || !loc){ errEl.textContent = 'Please fill in both fields'; errEl.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Registering…';
   try{
-    var data=await apiFetch('/api/admin/kiosks',{method:'POST',body:JSON.stringify({unitName:name,location:loc})});
-    var u=data.unit;
-    okEl.innerHTML='<div class="alert-ok"><strong>✓ Kiosk registered!</strong><br>'+
-      'Name: <strong>'+esc(u.unitName)+'</strong><br>'+
-      'Location: '+esc(u.location)+'<br>'+
-      'Code: <span class="mono" style="color:var(--leaf)">'+esc(u.unitCode)+'</span><br>'+
-      '<span style="font-size:12px">Unit ID (paste into kiosk.py as UNIT_ID):</span><br>'+
-      '<code style="font-size:12px;word-break:break-all;color:var(--leaf)">'+esc(u.id)+'</code> '+
-      '<button class="copy-btn" onclick="copyText(\''+esc(u.id)+'\',this)">Copy ID</button></div>';
-    okEl.style.display='block';
-    document.getElementById('rk-name').value='';document.getElementById('rk-loc').value='';
-    tabLoaded.kiosks=false;loadKiosks();
-    tabLoaded.overview=false;
-    showToast('Kiosk "'+u.unitName+'" registered');
-  }catch(e){errEl.textContent=e.message;errEl.style.display='block';}
-  finally{btn.disabled=false;btn.textContent='Register Kiosk';}
+    var data = await apiFetch('/api/admin/kiosks', {method:'POST', body:JSON.stringify({unitName:name, location:loc})});
+    var u = data.unit;
+    okEl.innerHTML = '<div class="alert-ok">✅ <strong>Kiosk registered!</strong><br>' +
+      'Name: <strong>' + esc(u.unitName) + '</strong><br>' +
+      'Location: ' + esc(u.location) + '<br>' +
+      'Code: <span class="mono" style="color:var(--leaf);font-weight:700">' + esc(u.unitCode) + '</span><br>' +
+      '<div style="margin-top:8px;font-size:12px;font-weight:600;color:var(--muted)">Paste this UUID into kiosk.py as UNIT_ID:</div>' +
+      '<div style="background:#f8fafc;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-top:4px;font-family:monospace;font-size:12px;word-break:break-all">' + esc(u.id) + '</div>' +
+      '<button class="copy-btn" style="margin-top:8px" onclick="copyText(\'' + esc(u.id) + '\',this)">Copy UUID</button></div>';
+    okEl.style.display = 'block';
+    document.getElementById('rk-name').value = ''; document.getElementById('rk-loc').value = '';
+    tabLoaded.kiosks = false; loadKiosks();
+    showToast('Kiosk "' + u.unitName + '" registered');
+  } catch(e){ errEl.textContent = e.message; errEl.style.display = 'block'; }
+  finally{ btn.disabled = false; btn.textContent = 'Register Kiosk'; }
 }
 
 /* ── Users ── */
 async function loadUsers(){
-  tabLoaded.users=true;
-  var el=document.getElementById('users-content');
-  el.innerHTML='<div class="loading">Loading users…</div>';
+  tabLoaded.users = true;
+  var el = document.getElementById('users-content');
+  el.innerHTML = '<div class="card"><div class="card-body"><div class="empty"><div class="empty-ico">⏳</div><p>Loading users…</p></div></div></div>';
   try{
-    var data=await apiFetch('/api/admin/users');
-    renderUsers(el,data.users||[]);
-  }catch(e){
-    el.innerHTML='<div class="err-box">Failed to load users: '+esc(e.message)+'</div>';
+    var data = await apiFetch('/api/admin/users');
+    _allUsers = data.users || [];
+    renderUsers(el, _allUsers);
+  } catch(e){
+    el.innerHTML = '<div class="err-box">Failed to load users: ' + esc(e.message) + '</div>';
   }
 }
-function renderUsers(el,users){
+function renderUsers(el, users){
   if(!users.length){
-    el.innerHTML='<div class="card"><div class="empty"><div class="empty-ico">👤</div><div>No users registered yet.</div>'+
-      '<div style="margin-top:12px"><button class="btn btn-primary" onclick="openModal(\'modal-reg-user\')">Register First User</button></div></div></div>';
+    el.innerHTML = '<div class="card"><div class="empty"><div class="empty-ico">👥</div><h3>No users found</h3><p>Register the first user or adjust your search.</p><button class="btn btn-primary" onclick="openModal(\'modal-reg-user\')">+ Register User</button></div></div>';
     return;
   }
-  var rows=users.map(function(u){
-    var net=network(u.phone);
-    var pts=(u.balance&&u.balance.currentPoints!=null)?Number(u.balance.currentPoints).toLocaleString():'—';
-    var lifetime=(u.balance&&u.balance.lifetimePoints)?Number(u.balance.lifetimePoints).toLocaleString():'0';
-    var initials=(u.name||'?').trim().split(' ').map(function(w){return w[0]||'';}).join('').slice(0,2).toUpperCase();
-    var statusBadge=u.isActive?'<span class="badge badge-green">Active</span>':'<span class="badge badge-red">Inactive</span>';
-    var actionBtn=u.isActive
-      ?'<button class="btn btn-sm btn-deactivate" onclick="toggleUser(\''+u.id+'\',false)">Deactivate</button>'
-      :'<button class="btn btn-sm btn-activate" onclick="toggleUser(\''+u.id+'\',true)">Activate</button>';
-    return '<tr>'+
-      '<td><div style="display:flex;align-items:center;gap:8px"><div class="user-initial">'+esc(initials)+'</div>'+
-      '<div><div style="font-weight:600;font-size:13px">'+esc(u.name)+'</div>'+
-      '<div style="font-size:11px;color:var(--muted)">'+esc(u.email)+'</div></div></div></td>'+
-      '<td><div class="mono">'+esc(u.phone||'—')+'</div><span class="badge '+net.cls+'" style="margin-top:2px;font-size:10px">'+net.n+'</span></td>'+
-      '<td><span class="mono" style="color:var(--leaf-bright);font-weight:600">'+esc(u.userCode||'—')+'</span></td>'+
-      '<td style="font-weight:700;color:var(--amber)">'+pts+'</td>'+
-      '<td style="color:var(--muted);font-size:12px">'+lifetime+'</td>'+
-      '<td>'+statusBadge+'</td>'+
-      '<td style="font-size:11px;color:var(--muted)">'+fmt(u.createdAt)+'</td>'+
-      '<td>'+actionBtn+'</td>'+
+  var activeCount = users.filter(function(u){ return u.isActive; }).length;
+  var rows = users.map(function(u){
+    var net = network(u.phone);
+    var pts = (u.balance && u.balance.currentPoints != null) ? Number(u.balance.currentPoints).toLocaleString() : '—';
+    var lifetime = (u.balance && u.balance.lifetimePoints) ? Number(u.balance.lifetimePoints).toLocaleString() : '0';
+    var initials = (u.name||'?').trim().split(' ').map(function(w){ return w[0]||''; }).join('').slice(0,2).toUpperCase();
+    var avatarColor = u.isActive ? 'background:var(--leaf-pale);color:var(--leaf)' : 'background:#f1f5f9;color:#94a3b8';
+    var statusBadge = u.isActive ? '<span class="badge badge-green">● Active</span>' : '<span class="badge badge-gray">● Inactive</span>';
+    var actionBtn = u.isActive
+      ? '<button class="btn btn-xs btn-deactivate" onclick="toggleUser(\'' + u.id + '\',false)">Deactivate</button>'
+      : '<button class="btn btn-xs btn-activate" onclick="toggleUser(\'' + u.id + '\',true)">Activate</button>';
+    return '<tr>' +
+      '<td><div style="display:flex;align-items:center;gap:10px">' +
+      '<div class="user-avatar" style="' + avatarColor + '">' + esc(initials) + '</div>' +
+      '<div><div style="font-weight:600">' + esc(u.name) + '</div><div style="font-size:11px;color:var(--muted)">' + esc(u.email) + '</div></div></div></td>' +
+      '<td><div class="mono">' + esc(u.phone||'—') + '</div><span class="badge ' + net.cls + '" style="margin-top:3px;font-size:10px">' + net.n + '</span></td>' +
+      '<td><span class="mono" style="color:var(--leaf-bright);font-weight:700;font-size:13px">' + esc(u.userCode||'—') + '</span></td>' +
+      '<td><span style="font-weight:700;color:var(--amber);font-size:14px">' + pts + '</span></td>' +
+      '<td style="color:var(--muted)">' + lifetime + '</td>' +
+      '<td>' + statusBadge + '</td>' +
+      '<td style="font-size:11px;color:var(--muted)">' + fmt(u.createdAt) + '</td>' +
+      '<td>' + actionBtn + '</td>' +
       '</tr>';
   }).join('');
-  el.innerHTML='<div class="card"><div class="card-header">'+
-    '<div class="card-title">All Users <span class="badge badge-gray" style="margin-left:8px">'+users.length+'</span></div>'+
-    '</div><div class="table-wrap"><table>'+
-    '<thead><tr><th>Name</th><th>Phone</th><th>User Code</th><th>Points</th><th>Lifetime Pts</th><th>Status</th><th>Joined</th><th>Action</th></tr></thead>'+
-    '<tbody>'+rows+'</tbody></table></div></div>';
+  el.innerHTML =
+    '<div class="card">' +
+    '<div class="table-toolbar">' +
+    '<div style="display:flex;align-items:center;gap:12px"><div class="card-title">All Users</div>' +
+    '<span class="badge badge-green">' + activeCount + ' active</span><span class="badge badge-gray">' + users.length + ' total</span></div>' +
+    '<div class="table-search"><span style="color:var(--muted)">🔍</span><input type="text" placeholder="Search name, email, code…" oninput="handleGlobalSearch(this.value)" value="' + esc(document.getElementById('global-search').value) + '"/></div>' +
+    '</div>' +
+    '<div class="table-wrap"><table>' +
+    '<thead><tr><th>Name</th><th>Phone</th><th>User Code</th><th>Points</th><th>Lifetime</th><th>Status</th><th>Joined</th><th>Action</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div></div>';
 }
-async function toggleUser(id,activate){
-  if(!confirm('Are you sure you want to '+(activate?'activate':'deactivate')+' this user?'))return;
+async function toggleUser(id, activate){
+  if(!confirm('Are you sure you want to ' + (activate ? 'activate' : 'deactivate') + ' this user?')) return;
   try{
-    await apiFetch('/api/admin/users/'+id,{method:'PATCH',body:JSON.stringify({isActive:activate})});
-    showToast('User '+(activate?'activated':'deactivated'));
+    await apiFetch('/api/admin/users/' + id, {method:'PATCH', body:JSON.stringify({isActive:activate})});
+    showToast('User ' + (activate ? 'activated' : 'deactivated'));
     loadUsers();
-  }catch(e){showToast('Failed: '+e.message,false);}
+  } catch(e){ showToast('Failed: ' + e.message, false); }
 }
 async function doRegisterUser(){
-  var name=document.getElementById('ru-name').value.trim();
-  var email=document.getElementById('ru-email').value.trim();
-  var phone=document.getElementById('ru-phone').value.trim();
-  var pass=document.getElementById('ru-pass').value;
-  var errEl=document.getElementById('ru-err');
-  var btn=document.getElementById('ru-btn');
-  errEl.style.display='none';
-  if(!name||!email||!phone||!pass){errEl.textContent='All fields are required';errEl.style.display='block';return;}
-  btn.disabled=true;btn.textContent='Creating…';
+  var name = document.getElementById('ru-name').value.trim();
+  var email = document.getElementById('ru-email').value.trim();
+  var phone = document.getElementById('ru-phone').value.trim();
+  var pass = document.getElementById('ru-pass').value;
+  var errEl = document.getElementById('ru-err'), btn = document.getElementById('ru-btn');
+  errEl.style.display = 'none';
+  if(!name || !email || !phone || !pass){ errEl.textContent = 'All fields are required'; errEl.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Creating…';
   try{
-    var data=await apiFetch('/api/admin/users',{method:'POST',body:JSON.stringify({name:name,email:email,phone:phone,password:pass})});
-    showToast('Account created for '+data.user.name);
+    var data = await apiFetch('/api/admin/users', {method:'POST', body:JSON.stringify({name:name, email:email, phone:phone, password:pass})});
+    showToast('Account created for ' + data.user.name);
     closeModal('modal-reg-user');
-    document.getElementById('ru-name').value='';document.getElementById('ru-email').value='';
-    document.getElementById('ru-phone').value='';document.getElementById('ru-pass').value='';
-    tabLoaded.users=false;loadUsers();
-    tabLoaded.overview=false;
-  }catch(e){errEl.textContent=e.message;errEl.style.display='block';}
-  finally{btn.disabled=false;btn.textContent='Create Account';}
+    ['ru-name','ru-email','ru-phone','ru-pass'].forEach(function(id){ document.getElementById(id).value = ''; });
+    tabLoaded.users = false; loadUsers();
+    tabLoaded.overview = false;
+  } catch(e){ errEl.textContent = e.message; errEl.style.display = 'block'; }
+  finally{ btn.disabled = false; btn.textContent = 'Create Account'; }
 }
 
 /* ── Redemptions ── */
-var _reFilter='all';
 async function loadRedemptions(){
-  tabLoaded.redeem=true;
-  var el=document.getElementById('redeem-content');
-  el.innerHTML='<div class="loading">Loading redemptions…</div>';
+  tabLoaded.redeem = true;
+  var el = document.getElementById('redeem-content');
+  el.innerHTML = '<div class="card"><div class="card-body"><div class="empty"><div class="empty-ico">⏳</div><p>Loading redemptions…</p></div></div></div>';
   try{
-    var data=await apiFetch('/api/admin/redemptions');
-    renderRedemptions(el,data);
-  }catch(e){
-    el.innerHTML='<div class="err-box">Failed to load redemptions: '+esc(e.message)+'</div>';
+    var data = await apiFetch('/api/admin/redemptions');
+    renderRedemptions(el, data);
+  } catch(e){
+    el.innerHTML = '<div class="err-box">Failed to load redemptions: ' + esc(e.message) + '</div>';
   }
 }
-function renderRedemptions(el,data){
-  var stats=data.stats||{};
-  var all=data.redemptions||[];
-  var filtered=_reFilter==='all'?all:all.filter(function(r){return r.status===_reFilter;});
-  var filterBar=['all','successful','failed','pending'].map(function(f){
-    return '<button class="btn btn-sm '+(_reFilter===f?'btn-primary':'btn-ghost')+'" '+
-      'onclick="_reFilter=\''+f+'\';loadRedemptions()" style="text-transform:capitalize">'+f+'</button>';
+function renderRedemptions(el, data){
+  var stats = data.stats || {};
+  var all = data.redemptions || [];
+  var filtered = _reFilter === 'all' ? all : all.filter(function(r){ return r.status === _reFilter; });
+  var filterBar = ['all','successful','failed','pending'].map(function(f){
+    var active = _reFilter === f;
+    return '<button class="btn btn-sm ' + (active ? 'btn-primary' : 'btn-ghost') + '" onclick="_reFilter=\'' + f + '\';loadRedemptions()" style="text-transform:capitalize">' +
+      (f==='all'?'All':f==='successful'?'✓ Successful':f==='failed'?'✗ Failed':'⏳ Pending') + '</button>';
   }).join('');
-  var rows=filtered.map(function(r){
-    var net=network(r.phoneNumber);
-    var statusBadge=r.status==='successful'?'<span class="badge badge-green">✓ Success</span>'
-      :r.status==='failed'?'<span class="badge badge-red">✗ Failed</span>'
-      :'<span class="badge badge-amber">⏳ Pending</span>';
-    return '<tr>'+
-      '<td><div style="font-weight:600;font-size:13px">'+esc((r.user&&r.user.name)||'—')+'</div>'+
-      '<div style="font-size:11px;color:var(--muted)">'+esc((r.user&&r.user.email)||'')+'</div></td>'+
-      '<td class="mono">'+esc(r.phoneNumber||'—')+'</td>'+
-      '<td><span class="badge '+net.cls+'">'+net.n+'</span></td>'+
-      '<td style="font-weight:600;color:var(--amber)">'+r.pointsRedeemed+'</td>'+
-      '<td style="font-weight:600">UGX '+Number(r.airtimeAmountUgx||0).toLocaleString()+'</td>'+
-      '<td>'+statusBadge+(r.status==='failed'&&r.errorMessage?'<div style="font-size:11px;color:var(--red);margin-top:2px">'+esc(r.errorMessage)+'</div>':'')+'</td>'+
-      '<td class="mono muted" style="font-size:11px">'+esc(r.atTransactionId||'—')+'</td>'+
-      '<td style="font-size:12px;color:var(--muted)">'+fmt(r.createdAt)+'</td>'+
+  var rows = filtered.map(function(r){
+    var net = network(r.phoneNumber);
+    var statusBadge = r.status === 'successful' ? '<span class="badge badge-green">✓ Success</span>'
+      : r.status === 'failed' ? '<span class="badge badge-red">✗ Failed</span>'
+      : '<span class="badge badge-amber">⏳ Pending</span>';
+    var initials = ((r.user && r.user.name) || '?').trim().split(' ').map(function(w){ return w[0]||''; }).join('').slice(0,2).toUpperCase();
+    return '<tr>' +
+      '<td><div style="display:flex;align-items:center;gap:10px"><div class="user-avatar">' + esc(initials) + '</div>' +
+      '<div><div style="font-weight:600">' + esc((r.user && r.user.name) || '—') + '</div>' +
+      '<div style="font-size:11px;color:var(--muted)">' + esc((r.user && r.user.email) || '') + '</div></div></div></td>' +
+      '<td class="mono">' + esc(r.phoneNumber || '—') + '</td>' +
+      '<td><span class="badge ' + net.cls + '">' + net.n + '</span></td>' +
+      '<td style="font-weight:700;color:var(--amber)">' + (r.pointsRedeemed || 0).toLocaleString() + ' pts</td>' +
+      '<td style="font-weight:700">UGX ' + Number(r.airtimeAmountUgx || 0).toLocaleString() + '</td>' +
+      '<td>' + statusBadge + (r.status === 'failed' && r.errorMessage ? '<div style="font-size:10px;color:var(--red);margin-top:2px">' + esc(r.errorMessage) + '</div>' : '') + '</td>' +
+      '<td class="mono text-muted" style="font-size:10px">' + esc(r.atTransactionId || '—') + '</td>' +
+      '<td style="font-size:12px;color:var(--muted)">' + fmt(r.createdAt) + '</td>' +
       '</tr>';
-  }).join('')||'<tr><td colspan="8" style="padding:30px;text-align:center;color:var(--muted)">No redemptions found</td></tr>';
-  el.innerHTML=
-    '<div class="stats-strip">'+
-    '<div class="stat-card"><div class="stat-num">'+(stats.total||0)+'</div><div class="stat-lbl">Total</div></div>'+
-    '<div class="stat-card" style="border-left-color:var(--leaf-bright)"><div class="stat-num">'+(stats.successful||0)+'</div><div class="stat-lbl">Successful</div></div>'+
-    '<div class="stat-card" style="border-left-color:var(--red)"><div class="stat-num">'+(stats.failed||0)+'</div><div class="stat-lbl">Failed</div></div>'+
-    '<div class="stat-card" style="border-left-color:var(--amber)"><div class="stat-num">UGX '+Number(stats.totalUGX||0).toLocaleString()+'</div><div class="stat-lbl">Total Paid Out</div></div>'+
-    '<div class="stat-card" style="border-left-color:var(--amber)"><div class="stat-num">'+Number(stats.totalPoints||0).toLocaleString()+'</div><div class="stat-lbl">Points Redeemed</div></div>'+
-    '</div>'+
-    '<div class="card"><div class="card-header">'+
-    '<div class="card-title">Redemption History <span class="badge badge-gray" style="margin-left:8px">'+filtered.length+'</span></div>'+
-    '<div class="flex gap-8">'+filterBar+'</div></div>'+
-    '<div class="table-wrap"><table>'+
-    '<thead><tr><th>User</th><th>Phone</th><th>Network</th><th>Points</th><th>Airtime</th><th>Status</th><th>AT Txn ID</th><th>Date</th></tr></thead>'+
-    '<tbody>'+rows+'</tbody></table></div></div>';
+  }).join('') || '<tr><td colspan="8" style="padding:40px;text-align:center;color:var(--muted)">No redemptions found for this filter</td></tr>';
+  el.innerHTML =
+    '<div class="stats-strip">' +
+    '<div class="stat-card"><div class="stat-icon">💳</div><div class="stat-num">' + (stats.total || 0) + '</div><div class="stat-lbl">Total Redemptions</div></div>' +
+    '<div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-num">' + (stats.successful || 0) + '</div><div class="stat-lbl">Successful</div></div>' +
+    '<div class="stat-card red"><div class="stat-icon">❌</div><div class="stat-num">' + (stats.failed || 0) + '</div><div class="stat-lbl">Failed</div></div>' +
+    '<div class="stat-card amber"><div class="stat-icon">💰</div><div class="stat-num">UGX ' + Number(stats.totalUGX || 0).toLocaleString() + '</div><div class="stat-lbl">Total Paid Out</div></div>' +
+    '<div class="stat-card blue"><div class="stat-icon">⭐</div><div class="stat-num">' + Number(stats.totalPoints || 0).toLocaleString() + '</div><div class="stat-lbl">Points Redeemed</div></div>' +
+    '</div>' +
+    '<div class="card"><div class="card-header">' +
+    '<div class="card-title">💸 Redemption History <span class="badge badge-gray" style="margin-left:8px">' + filtered.length + ' records</span></div>' +
+    '<div class="card-actions">' + filterBar + '</div></div>' +
+    '<div class="table-wrap"><table>' +
+    '<thead><tr><th>User</th><th>Phone</th><th>Network</th><th>Points</th><th>Airtime</th><th>Status</th><th>Txn ID</th><th>Date</th></tr></thead>' +
+    '<tbody>' + rows + '</tbody></table></div></div>';
 }
+
+/* initial load */
+loadOverview();
 </script>
 </body>
 </html>

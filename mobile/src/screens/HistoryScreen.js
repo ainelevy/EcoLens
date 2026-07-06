@@ -109,7 +109,7 @@ export default function HistoryScreen() {
       <Ionicons name="leaf-outline" size={64} color="#ccc" />
       <Text style={styles.emptyTitle}>No disposal history yet</Text>
       <Text style={styles.emptyText}>
-        Visit an EcoLens disposal unit, enter your user code, and insert a plastic bottle to start earning points.
+        Visit an EcoLens kiosk, scan its QR code with the Scan tab, and insert a plastic bottle to start earning points.
       </Text>
     </View>
   );

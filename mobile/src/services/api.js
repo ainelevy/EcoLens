@@ -44,6 +44,17 @@ export const disposalAPI = {
 
   getStats: () =>
     api.get('/disposal/stats'),
+
+  // Kiosk QR flow: check a kiosk's live status, then start a session on it.
+  getKioskStatus: (unitId) =>
+    api.get(`/disposal/kiosks/${unitId}/status`),
+
+  startSession: (userCode, unitId) =>
+    api.post('/disposal/sessions/start', { userCode, unitId }),
+
+  // Live totals for a session the user started (polled while feeding at the kiosk).
+  getSession: (sessionId) =>
+    api.get(`/disposal/sessions/${sessionId}`),
 };
 
 // Airtime

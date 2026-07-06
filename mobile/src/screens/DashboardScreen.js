@@ -61,14 +61,25 @@ export default function DashboardScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* User code card */}
-      <View style={styles.codeCard}>
-        <Text style={styles.codeLabel}>Your User Code</Text>
-        <Text style={styles.codeValue}>{user?.userCode ?? '------'}</Text>
-        <Text style={styles.codeHint}>Enter this code at the disposal unit to earn points</Text>
-        <View style={styles.earningBadge}>
-          <Ionicons name="flash" size={13} color="#F57F17" />
-          <Text style={styles.earningBadgeText}>{POINTS_PER_DISPOSAL} points per plastic bottle</Text>
+      {/* Scan hero — starting a session is now QR-first */}
+      <View style={styles.heroCard}>
+        <View style={styles.heroTextWrap}>
+          <Text style={styles.heroKicker}>READY TO RECYCLE?</Text>
+          <Text style={styles.heroTitle}>Scan a kiosk to start earning</Text>
+        </View>
+        <TouchableOpacity style={styles.heroScanBtn} activeOpacity={0.85} onPress={() => navigation.navigate('Scan')}>
+          <Ionicons name="qr-code" size={22} color="#1B5E20" />
+          <Text style={styles.heroScanBtnText}>Scan Kiosk QR</Text>
+        </TouchableOpacity>
+        <View style={styles.heroChips}>
+          <View style={styles.heroChip}>
+            <Ionicons name="key-outline" size={12} color="#A5D6A7" />
+            <Text style={styles.heroChipText}>{user?.userCode ?? '------'}</Text>
+          </View>
+          <View style={styles.heroChip}>
+            <Ionicons name="flash" size={12} color="#FFE082" />
+            <Text style={styles.heroChipText}>{POINTS_PER_DISPOSAL} pts / bottle</Text>
+          </View>
         </View>
       </View>
 
@@ -109,6 +120,17 @@ export default function DashboardScreen({ navigation }) {
 
       {/* Quick actions */}
       <Text style={styles.sectionTitle}>Quick Actions</Text>
+
+      <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Scan')}>
+        <View style={[styles.actionIcon, { backgroundColor: '#E8F5E9' }]}>
+          <Ionicons name="qr-code" size={22} color="#2E7D32" />
+        </View>
+        <View style={styles.actionText}>
+          <Text style={styles.actionTitle}>Scan Kiosk QR</Text>
+          <Text style={styles.actionSub}>Start a disposal session at a kiosk</Text>
+        </View>
+        <Ionicons name="chevron-forward" size={20} color="#ccc" />
+      </TouchableOpacity>
 
       <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('Redeem')}>
         <View style={[styles.actionIcon, { backgroundColor: '#FFF8E1' }]}>
@@ -162,7 +184,7 @@ export default function DashboardScreen({ navigation }) {
         </View>
         <View style={styles.howStep}>
           <View style={styles.howNum}><Text style={styles.howNumText}>2</Text></View>
-          <Text style={styles.howText}>Enter your user code on the kiosk screen</Text>
+          <Text style={styles.howText}>Open Scan and point your camera at the kiosk's QR code</Text>
         </View>
         <View style={styles.howStep}>
           <View style={styles.howNum}><Text style={styles.howNumText}>3</Text></View>
@@ -186,12 +208,15 @@ const styles = StyleSheet.create({
   greeting: { fontSize: 14, color: '#888' },
   name: { fontSize: 24, fontWeight: '700', color: '#1B5E20' },
   profileBtn: { padding: 4 },
-  codeCard: { backgroundColor: '#1B5E20', marginHorizontal: 20, borderRadius: 16, padding: 20, alignItems: 'center' },
-  codeLabel: { color: '#A5D6A7', fontSize: 12, fontWeight: '600', textTransform: 'uppercase', letterSpacing: 1 },
-  codeValue: { color: '#fff', fontSize: 36, fontWeight: '700', marginVertical: 8, letterSpacing: 4 },
-  codeHint: { color: '#A5D6A7', fontSize: 12 },
-  earningBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 5, marginTop: 10, gap: 4 },
-  earningBadgeText: { color: '#FFE082', fontSize: 12, fontWeight: '600' },
+  heroCard: { backgroundColor: '#1B5E20', marginHorizontal: 20, borderRadius: 18, padding: 20 },
+  heroTextWrap: { marginBottom: 16 },
+  heroKicker: { color: '#A5D6A7', fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2 },
+  heroTitle: { color: '#fff', fontSize: 22, fontWeight: '700', marginTop: 6, lineHeight: 28 },
+  heroScanBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8, backgroundColor: '#fff', borderRadius: 14, paddingVertical: 14 },
+  heroScanBtnText: { color: '#1B5E20', fontSize: 16, fontWeight: '700' },
+  heroChips: { flexDirection: 'row', gap: 8, marginTop: 14 },
+  heroChip: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: 'rgba(255,255,255,0.12)', borderRadius: 20, paddingHorizontal: 12, paddingVertical: 6 },
+  heroChipText: { color: '#E8F5E9', fontSize: 12, fontWeight: '600', letterSpacing: 0.5 },
   progressCard: { backgroundColor: '#fff', marginHorizontal: 20, marginTop: 14, borderRadius: 14, padding: 16 },
   progressHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   progressTitle: { fontSize: 13, fontWeight: '600', color: '#333' },

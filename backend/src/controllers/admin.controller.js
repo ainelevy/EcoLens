@@ -52,8 +52,8 @@ exports.listKiosks = async (req, res) => {
         status: u.status,
         lastSeenAt: u.lastSeenAt,
         currentBottleCount: u.currentBottleCount || 0,
-        capacity: u.capacity || 10,
-        isFull: (u.currentBottleCount || 0) >= (u.capacity || 10),
+        capacity: u.capacity || 300,
+        isFull: (u.currentBottleCount || 0) >= (u.capacity || 300),
         stats: {
           totalSessions: sessions,
           totalDisposals: totalEvents,
